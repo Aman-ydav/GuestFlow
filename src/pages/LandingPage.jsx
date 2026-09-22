@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { FiArrowRight, FiCheckCircle, FiGitBranch } from 'react-icons/fi'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { HeroTubesCanvas } from '@/components/marketing/HeroTubesCanvas'
 import { ROUTES } from '@/constants/routes'
 import { FLOW_LIST } from '@/lib/flowTheme'
 import { cn } from '@/lib/utils'
@@ -12,12 +13,18 @@ export default function LandingPage() {
       {/* Hero — deliberately fixed dark background regardless of site theme, a brand
           treatment, not a light/dark-mode surface (see docs/03-design-system.md).
           overflow-hidden + min-w-0 on both columns keeps the illustration from ever
-          bleeding into the text column at any viewport width. */}
-      <section className="overflow-hidden bg-[#0B0D10] text-white">
-        <div className="site-container grid items-center gap-10 py-16 md:grid-cols-2 md:gap-16 md:py-24">
+          bleeding into the text column at any viewport width. HeroTubesCanvas sits
+          absolutely behind the content (relative z-10) as a purely decorative,
+          cursor-interactive WebGL layer — see its own file for how it fails
+          silently (plain background, no broken page) if the CDN it loads from
+          is unreachable. */}
+      <section className="relative overflow-hidden bg-[#0B0D10] text-white">
+        <HeroTubesCanvas className="absolute inset-0 h-full w-full" />
+        <div className="site-container relative z-10 grid items-center gap-10 py-16 md:grid-cols-2 md:gap-16 md:py-24">
           <div className="min-w-0 max-w-xl">
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Go beyond the <span className="text-brand-teal">front desk.</span>
+            <h1 className="font-display text-5xl font-extrabold tracking-tight sm:text-6xl">
+              <span className="block">Go beyond the</span>
+              <span className="block text-brand-teal">front desk.</span>
             </h1>
             <p className="mt-4 max-w-md text-sm text-white/70">
               GuestFlow is a visitor management system — registration, host approvals, pre-approved invites, and a

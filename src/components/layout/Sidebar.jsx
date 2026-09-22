@@ -21,29 +21,29 @@ export function Sidebar({ role }) {
   const items = NAV_ITEMS.filter((item) => item.roles.includes(role))
 
   return (
-    <aside
-      className={cn(
-        'relative hidden shrink-0 flex-col border-r border-border bg-card transition-[width] duration-300 ease-in-out md:flex',
-        collapsed ? 'w-19' : 'w-64'
-      )}
-    >
-      <div className={cn('flex h-16 items-center border-b border-border', collapsed ? 'justify-center px-2' : 'px-5')}>
-        <Link to={ROUTES.HOME} className="flex shrink-0 items-center" aria-label="GuestFlow">
-          {collapsed ? (
-            <img src="/logo-icon.png" alt="" className="size-7" />
-          ) : (
-            <img src="/full-logo.png" alt="" className="h-7 w-auto" />
-          )}
-        </Link>
-      </div>
+    <TooltipProvider delayDuration={150}>
+      <aside
+        className={cn(
+          'relative hidden shrink-0 flex-col border-r border-border bg-card transition-[width] duration-300 ease-in-out md:flex',
+          collapsed ? 'w-19' : 'w-64'
+        )}
+      >
+        <div className={cn('flex h-16 items-center border-b border-border', collapsed ? 'justify-center px-2' : 'px-5')}>
+          <Link to={ROUTES.HOME} className="flex shrink-0 items-center" aria-label="GuestFlow">
+            {collapsed ? (
+              <img src="/logo-icon.png" alt="" className="size-7" />
+            ) : (
+              <img src="/full-logo.png" alt="" className="h-7 w-auto" />
+            )}
+          </Link>
+        </div>
 
-      {/* Collapse/expand handle — a hover-highlighted line on the sidebar's edge with
-          a resize-style cursor, instead of a chevron button. The button used to sit next
-          to the logo in the collapsed header, which didn't leave the logo enough room to
-          read clearly at w-19; a full-height edge handle needs no header space at all. A
-          shadcn Tooltip spells out "click to expand/collapse" on hover — a plain color
-          highlight alone didn't make it obvious the line was clickable. */}
-      <TooltipProvider delayDuration={150}>
+        {/* Collapse/expand handle — a hover-highlighted line on the sidebar's edge with
+            a resize-style cursor, instead of a chevron button. The button used to sit next
+            to the logo in the collapsed header, which didn't leave the logo enough room to
+            read clearly at w-19; a full-height edge handle needs no header space at all. A
+            shadcn Tooltip spells out "click to expand/collapse" on hover — a plain color
+            highlight alone didn't make it obvious the line was clickable. */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
@@ -57,31 +57,35 @@ export function Sidebar({ role }) {
             {collapsed ? 'Click to expand sidebar' : 'Click to collapse sidebar'}
           </TooltipContent>
         </Tooltip>
-      </TooltipProvider>
 
-      <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto p-3">
-        {items.map(({ flow }) => (
-          <NavLink
-            key={flow.to}
-            to={flow.to}
-            end={flow.to === ROUTES.FRONT_DESK}
-            aria-label={collapsed ? flow.title : undefined}
-            title={collapsed ? flow.title : undefined}
-            className={({ isActive }) =>
-              cn(
-                'flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-all duration-200',
-                collapsed && 'justify-center px-0',
-                isActive
-                  ? cn(flow.tone, 'shadow-sm')
-                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-              )
-            }
-          >
-            <flow.icon className="size-4.5 shrink-0" />
-            {!collapsed && <span className="truncate">{flow.title}</span>}
-          </NavLink>
-        ))}
-      </nav>
-    </aside>
+        <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto p-3">
+          {items.map(({ flow }) => (
+            <Tooltip key={flow.to}>
+              <TooltipTrigger asChild>
+                <NavLink
+                  to={flow.to}
+                  end={flow.to === ROUTES.FRONT_DESK}
+                  aria-label={collapsed ? flow.title : undefined}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-all duration-200',
+                      collapsed && 'justify-center px-0',
+                      isActive
+                        ? cn(flow.tone, 'shadow-sm')
+                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    )
+                  }
+                >
+                  <flow.icon className="size-4.5 shrink-0" />
+                  {!collapsed && <span className="truncate">{flow.title}</span>}
+                </NavLink>
+              </TooltipTrigger>
+              {/* Only when collapsed — expanded nav already shows the label as text. */}
+              {collapsed && <TooltipContent side="right">{flow.title}</TooltipContent>}
+            </Tooltip>
+          ))}
+        </nav>
+      </aside>
+    </TooltipProvider>
   )
 }

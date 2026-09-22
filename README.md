@@ -39,3 +39,7 @@ GuestFlow/
 ## Demo
 
 Screenshots/demo video will go in [`demo/`](demo/) and be linked here before submission.
+
+## Credits
+
+The landing page hero's interactive cursor-following tube background (`src/components/marketing/HeroTubesCanvas.jsx`) adapts the "Tubes Cursor" concept — original concept and implementation by [Kevin Levron](https://www.framer.com/@kevin-levron/), built on the `threejs-components` library. GuestFlow's version is a from-scratch plain-JS component (loads the renderer from a CDN at runtime, no `three`/`framer-motion` dependency added) restricted to the app's own brand palette instead of arbitrary colors.

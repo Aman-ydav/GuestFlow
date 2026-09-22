@@ -19,7 +19,7 @@ GuestFlow/
 │   │   ├── providers.jsx        Redux Provider
 │   │   └── uiSlice.js           theme/role/filters — core app state, not a "feature"
 │   ├── components/
-│   │   └── marketing/           MarketingNavbar, Footer, MarketingLayout — the public landing page's own components, not part of components/ui
+│   │   └── marketing/           MarketingNavbar, Footer, MarketingLayout, HeroTubesCanvas — the public landing page's own components, not part of components/ui
 │   ├── store/
 │   │   ├── index.js             configureStore, combines feature slices
 │   │   └── rootReducer.js

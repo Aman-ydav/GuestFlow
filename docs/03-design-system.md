@@ -86,7 +86,11 @@ Default Tailwind body text is 16px; GuestFlow is a data-dense enterprise tool (s
 | Page titles | `text-xl font-semibold` (cap here) | 18px |
 | Dashboard hero numbers only (e.g. "27" visitor count) | `text-2xl font-bold` | 22px |
 
-**Rules:** never use `text-lg` or above for body copy. Reach for `font-medium`/`font-semibold` for emphasis before reaching for a bigger size. No page title exceeds `text-xl`.
+**Rules:** never use `text-lg` or above for body copy. Reach for `font-medium`/`font-semibold` for emphasis before reaching for a bigger size. No page title exceeds `text-xl`. This dense scale is a **dashboard rule, not a marketing-site rule** — the one deliberate exception is the landing hero's `<h1>`, which uses the `font-display` utility (Sora, loaded in `index.html`, `--font-display` token in `index.css`) at `text-5xl sm:text-6xl font-extrabold`, split across two explicit lines (`<span className="block">`) rather than left to wrap naturally — a marketing headline is allowed to be loud in a way a data table never is.
+
+## Landing hero background — interactive WebGL tubes
+
+**Decided (2026-09-22):** the hero section's dark background (`bg-[#0B0D10]`) has an interactive cursor-following tube animation behind the content (`components/marketing/HeroTubesCanvas.jsx`), adapted from a reference Aman provided (see README § Credits — original concept by Kevin Levron, `threejs-components` library). It loads its renderer from a CDN **at runtime** via a plain `import('https://...')` rather than installing `three` as a project dependency for one decorative section — `/* @vite-ignore */` tells Vite not to try to statically bundle that URL. Colors are drawn only from the app's own brand palette (teal/coral/lime + a couple of lighter variants), never arbitrary random hex, including on the click-to-reshuffle easter egg. Skipped entirely when `import.meta.env.MODE === 'test'` so the test suite never makes a real network call; skipped just as gracefully (try/catch, console error only) if the CDN is unreachable for a real visitor — either way the hero just shows its plain dark background, never a broken page.
 
 ## Spacing, radius, shape
 

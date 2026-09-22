@@ -140,6 +140,11 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Display font for large marketing headlines only (e.g. the landing hero) —
+     everything else stays on the default system font stack. Loaded from
+     Google Fonts in index.html. Generates the `font-display` utility. */
+  --font-display: 'Sora', ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
