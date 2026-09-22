@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FiCamera, FiRefreshCw, FiUpload, FiAlertCircle } from 'react-icons/fi'
+import { FiCamera, FiRefreshCw, FiUpload, FiAlertCircle, FiVideo } from 'react-icons/fi'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 /**
  * Mandatory photo capture for visitor registration (see requirements.md §I).
- * Live webcam preview -> canvas snapshot -> data URL. Falls back to a file
- * upload if the camera is denied/unavailable, with a clear message either way.
+ * Camera access is only requested after an explicit "Start Camera" click —
+ * never automatically on mount, so opening the kiosk tab doesn't itself
+ * trigger a permission prompt. Falls back to a file upload if the camera is
+ * denied/unavailable, with a clear message either way.
  */
 export function PhotoCapture({ value, onChange, error }) {
   const videoRef = useRef(null)
@@ -19,7 +21,9 @@ export function PhotoCapture({ value, onChange, error }) {
     streamRef.current = null
   }, [])
 
-  const startCamera = useCallback(async () => {
+  useEffect(() => stopStream, [stopStream]) // release the camera on unmount only
+
+  const startCamera = async () => {
     if (!navigator.mediaDevices?.getUserMedia) {
       setCameraState('unsupported')
       return
@@ -33,17 +37,7 @@ export function PhotoCapture({ value, onChange, error }) {
     } catch {
       setCameraState('denied')
     }
-  }, [])
-
-  useEffect(() => {
-    // Starting the webcam is exactly "synchronize with an external system" — the
-    // canonical useEffect use case — but getUserMedia is inherently async and must
-    // report its outcome (live/denied/unsupported) back via state.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (!value) startCamera()
-    return () => stopStream()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }
 
   const capture = () => {
     const video = videoRef.current
@@ -54,11 +48,12 @@ export function PhotoCapture({ value, onChange, error }) {
     canvas.getContext('2d').drawImage(video, 0, 0)
     onChange(canvas.toDataURL('image/jpeg', 0.85))
     stopStream()
+    setCameraState('idle')
   }
 
   const retake = () => {
     onChange(null)
-    startCamera()
+    setCameraState('idle')
   }
 
   const onFileSelected = (e) => {
@@ -88,8 +83,13 @@ export function PhotoCapture({ value, onChange, error }) {
               {cameraState === 'denied' ? 'Camera access denied.' : 'Camera not available.'} Upload a photo instead.
             </p>
           </div>
+        ) : cameraState === 'starting' ? (
+          <p className="text-xs text-muted-foreground">Requesting camera access…</p>
         ) : (
-          <p className="text-xs text-muted-foreground">Starting camera…</p>
+          <div className="flex flex-col items-center gap-1.5 p-4 text-center text-muted-foreground">
+            <FiVideo className="size-6" />
+            <p className="text-xs">Camera is off. Start it when you're ready.</p>
+          </div>
         )}
       </div>
 
@@ -102,8 +102,12 @@ export function PhotoCapture({ value, onChange, error }) {
           <Button type="button" size="sm" onClick={capture}>
             <FiCamera className="size-3.5" /> Capture Photo
           </Button>
+        ) : cameraState === 'idle' ? (
+          <Button type="button" size="sm" onClick={startCamera}>
+            <FiVideo className="size-3.5" /> Start Camera
+          </Button>
         ) : null}
-        {!value && (
+        {!value && cameraState !== 'starting' && (
           <>
             <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
               <FiUpload className="size-3.5" /> Upload instead

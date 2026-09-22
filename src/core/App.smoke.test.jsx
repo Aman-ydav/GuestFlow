@@ -45,13 +45,26 @@ describe('App shell', () => {
     expect(screen.getByRole('link', { name: /front desk/i })).toBeInTheDocument()
   })
 
-  it('navigates to the kiosk and renders the registration form with photo capture', async () => {
+  it('navigates to the kiosk and renders the registration form without auto-requesting the camera', async () => {
     renderAt('/app/kiosk')
     expect(await screen.findByRole('heading', { name: /visitor registration/i })).toBeInTheDocument()
     expect(screen.getByLabelText(/full name/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument()
-    // jsdom has no camera — PhotoCapture must fall back gracefully, not crash
-    expect(await screen.findByText(/upload a photo instead/i)).toBeInTheDocument()
+    // camera must NOT auto-start on mount — only after an explicit click
+    expect(screen.getByText(/camera is off/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /start camera/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /upload instead/i })).toBeInTheDocument()
+  })
+
+  it('falls back gracefully when the camera is unavailable, only after Start Camera is clicked', async () => {
+    renderAt('/app/kiosk')
+    const user = userEvent.setup()
+    await screen.findByRole('heading', { name: /visitor registration/i })
+    expect(screen.queryByText(/camera not available/i)).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /start camera/i }))
+    // jsdom has no navigator.mediaDevices — must fall back, not crash
+    expect(await screen.findByText(/camera not available/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /upload instead/i })).toBeInTheDocument()
   })
 
@@ -86,7 +99,8 @@ describe('App shell', () => {
 
   it('shows a 404 page for an unknown route', async () => {
     renderAt('/nonexistent-route')
-    expect(await screen.findByRole('heading', { name: /page not found/i })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: /doesn't exist/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /back to guestflow/i })).toBeInTheDocument()
   })
 
   it('collapses and expands the sidebar, hiding visible nav labels while collapsed', async () => {
@@ -106,9 +120,43 @@ describe('App shell', () => {
     expect(within(nav).getByText('Front Desk Dashboard')).toBeInTheDocument()
   })
 
-  it('shows a flow-colored banner on a not-yet-built page', async () => {
+  it('shows the flow-colored Host Approvals banner, and a "pick a host" state before one is chosen', async () => {
     renderAt('/app/inbox')
     expect(await screen.findByRole('heading', { level: 2, name: /host approvals/i })).toBeInTheDocument()
-    expect(screen.getByText(/coming next/i)).toBeInTheDocument()
+    // default role is 'front-desk', so no host is auto-selected yet — a real, honest empty state
+    expect(await screen.findByText(/pick a host from the top bar/i)).toBeInTheDocument()
+  })
+
+  it('renders the Invites page with a working creation form', async () => {
+    renderAt('/app/invites')
+    expect(await screen.findByRole('heading', { level: 2, name: /pre-approved invites/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /new invite/i })).toBeInTheDocument()
+    expect(screen.getByLabelText(/event title/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /confirm invite/i })).toBeInTheDocument()
+  })
+
+  it('renders the Front Desk table with real mock data (thousands of seeded visitors, not empty)', async () => {
+    renderAt('/app/front-desk')
+    expect(await screen.findByRole('heading', { level: 1, name: /front desk/i })).toBeInTheDocument()
+    expect(await screen.findByPlaceholderText(/search by name, email or phone/i)).toBeInTheDocument()
+    // the table renders real rows from the seeded dataset, not the "no visitors" empty state
+    expect(await screen.findByText(/page 1 of/i)).toBeInTheDocument()
+    expect(screen.queryByText(/no visitors match these filters/i)).not.toBeInTheDocument()
+  })
+
+  it('filters the Front Desk table by search text', async () => {
+    renderAt('/app/front-desk')
+    const user = userEvent.setup()
+    await screen.findByText(/page 1 of/i)
+    const search = screen.getByPlaceholderText(/search by name, email or phone/i)
+    await user.type(search, 'zzzzznobodyhasthisname')
+    expect(await screen.findByText(/no visitors match these filters/i)).toBeInTheDocument()
+  })
+
+  it('renders the Admin settings form once config finishes loading', async () => {
+    renderAt('/app/admin')
+    expect(await screen.findByRole('heading', { level: 2, name: /^admin$/i })).toBeInTheDocument()
+    expect(await screen.findByLabelText(/pre-approval limit/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /save settings/i })).toBeInTheDocument()
   })
 })

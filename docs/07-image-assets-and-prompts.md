@@ -36,16 +36,29 @@ Whatever the source, every illustration gets recoloured to **1–2 tokens from `
 
 Save to `public/illustrations/<kebab-case-name>.svg` per the naming convention in `04-folder-and-naming-conventions.md`.
 
-### The one thing still AI-generated: the logo mark
+### Status update — what actually shipped vs. what's still open
 
-No stock library has a "GuestFlow" brand mark — this one needs generating.
+**Decided (later, superseding the plan above): no icon logo mark in-page at all** — navbar/sidebar/footer use a text-only wordmark ("Guest" + primary-colored "Flow"), see `03-design-system.md` § Logo. A small mark is still useful for the **favicon** (a browser tab needs *something*, and a wordmark doesn't work at 16–32px) — that prompt is below, updated to the current palette.
 
-**`guestflow-mark.svg`** (app logomark — nav + favicon):
-> Prompt: "Minimalist flat vector logo icon, single solid color #14B8A6, no gradients, no shadows, no text: an abstract open door or gate silhouette merging into a simple checkmark or forward-arrow shape, geometric, square 512×512 canvas, transparent background, suitable for a small favicon at 32px."
+**Empty states currently use a plain icon + text** (`FiInbox`, `FiUsers`, etc. from `react-icons/fi`) rather than a full illustration — faster to ship, and consistent with the rest of the app's icon language. The unDraw/Storyset sourcing plan above is still the right call **if/when richer empty-state illustrations are added as a polish pass** — treat the table above as ready-to-use, not obsolete.
 
-Save to `public/logo/guestflow-mark.svg` and a simplified version as `public/favicon.svg`.
+### AI-generated prompts — logo mark, favicon, and an alternative hero illustration
+
+All three: **flat, solid color only, no gradients, no drop shadows, transparent background ("no background" per Aman's instruction)**, using GuestFlow's actual palette — teal `#1EA6A0`, coral `#F4527A`, ink `#14213A`, white. Save each under `public/` per the naming convention in `04-folder-and-naming-conventions.md`.
+
+**1. `guestflow-mark.svg` → also used as `public/favicon.svg`** (browser tab icon — the only place an icon mark still appears)
+> Prompt: "Minimalist flat vector logo icon, single solid color #1EA6A0, no gradients, no shadows, no text, transparent background: an abstract open door or gate silhouette merging into a simple checkmark or forward-arrow shape, geometric, square 512×512 canvas, bold enough to read clearly as a 16×16px browser favicon."
+
+A basic placeholder favicon (`public/favicon.svg`) already exists (a simple teal rounded-square with a checkmark) — this prompt is for a more polished replacement.
+
+**2. `hero-illustration-alt.svg`** (optional replacement for the current hand-coded `HeroIllustration.jsx` SVG, if a more polished/organic version is wanted)
+> Prompt: "Flat isometric vector illustration, solid colors only — teal #1EA6A0, coral #F4527A, ink #14213A, white — no gradients, no drop shadows, transparent background: three stacked, staggered office floor plates viewed in isometric perspective, each with 2–3 simple minimal human silhouettes (circle head, rounded rectangle body, no facial detail) standing near a small reception desk or door accent in coral, a couple of small parked-car shapes at ground level, clean geometric edges suitable for SVG, square composition, no text, no logos."
+
+If generated, swap it in by replacing the JSX body of `src/components/marketing/HeroIllustration.jsx` with an `<img src="/illustrations/hero-illustration-alt.svg" ... />` (or inline the new SVG directly) — keep the same `className` contract (`h-auto w-full max-w-xs md:max-w-sm`) so the hero grid layout doesn't need touching.
+
+**3. Empty-state illustrations** (only if upgrading from the current icon-only empty states) — use the unDraw/Storyset sourcing table above; no new AI prompts needed since flat single-color stock illustrations already exist for these common concepts.
 
 ## What I don't need sourced
 
-- Client/company logos — not applicable, this isn't a marketing site.
-- Stock photography — the design is illustration-led, matching the reference mood.
+- Client/company logos — not applicable, this isn't a marketing site, and fabricating fake client logos as social proof would be dishonest (see the landing page's "About this project" section instead of a testimonials wall).
+- Stock photography — the design is illustration/icon-led, matching the reference mood.

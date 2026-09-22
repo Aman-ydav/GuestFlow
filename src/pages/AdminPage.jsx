@@ -1,10 +1,11 @@
-import { ComingSoonPage } from './ComingSoonPage'
+import { FlowBanner } from '@/components/FlowBanner'
+import { AdminSettingsForm } from '@/features/admin/components/AdminSettingsForm'
 
 export default function AdminPage() {
   return (
-    <ComingSoonPage
-      flowKey="admin"
-      note="Configure the pre-approval limit, overstay threshold, and offices."
-    />
+    <div className="mx-auto max-w-2xl space-y-6">
+      <FlowBanner flowKey="admin" />
+      <AdminSettingsForm />
+    </div>
   )
 }

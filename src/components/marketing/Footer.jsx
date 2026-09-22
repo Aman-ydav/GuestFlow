@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/constants/routes'
+import { FitText } from './FitText'
 
 export function Footer() {
   return (
@@ -38,14 +39,12 @@ export function Footer() {
         </p>
       </div>
 
-      {/* Big wordmark flourish */}
-      <div className="site-container overflow-hidden pb-6">
-        <p
-          aria-hidden="true"
-          className="-mb-3 -ml-1 truncate text-[16vw] leading-none font-black tracking-tighter text-foreground/5 select-none sm:text-[12vw] lg:text-[9rem]"
-        >
+      {/* Big wordmark flourish — genuinely fills the full container width via FitText
+          (a vw-based font-size either overflows or falls short depending on word length). */}
+      <div className="site-container overflow-hidden pb-4">
+        <FitText textClassName="text-6xl font-black tracking-tighter text-foreground/[0.06] select-none" className="w-full">
           GuestFlow
-        </p>
+        </FitText>
       </div>
     </footer>
   )

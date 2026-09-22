@@ -73,3 +73,18 @@ export async function listAuditEvents(visitorId) {
   }
   return apiClient.get('/audit', { params: { visitorId } })
 }
+
+/** Cross-references audit events with visitors to answer "what did this host do
+ *  recently" — audit events only store visitorId, not hostId, so we join here
+ *  rather than duplicating hostId onto every event. */
+export async function listAuditEventsForHost(hostId, limit = 20) {
+  if (USE_MOCK_API) {
+    await delay(50, 150)
+    return db.auditEvents
+      .filter((e) => db.visitors.get(e.visitorId)?.hostId === hostId)
+      .sort((a, b) => new Date(b.at) - new Date(a.at))
+      .slice(0, limit)
+      .map((e) => ({ ...e, visitorName: db.visitors.get(e.visitorId)?.name }))
+  }
+  return apiClient.get('/audit', { params: { hostId, limit } })
+}

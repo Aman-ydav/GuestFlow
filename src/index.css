@@ -8,6 +8,14 @@
    .dark variant, no toggle. See ../docs/03-design-system.md.
    ============================================================ */
 
+/* Ties every `dark:` utility (including the ones baked into shadcn's generated
+   components/ui/* files, which we don't hand-edit) to a `.dark` ancestor class
+   that is NEVER applied anywhere in this app. Without this line, Tailwind v4
+   falls back to `prefers-color-scheme: dark` — meaning a visitor with system
+   dark mode on would see uncontrolled dark styling with no toggle to undo it.
+   This line is what makes every `dark:` class permanently inert. Do not remove it. */
+@custom-variant dark (&:is(.dark *));
+
 :root {
   --radius: 0.5rem;
 
