@@ -115,6 +115,16 @@ Default Tailwind body text is 16px; GuestFlow is a data-dense enterprise tool (s
 
 This is exactly what broke the sidebar's "icon and label on one line" — `Sidebar.jsx`'s nav `NavLink`s are wrapped in `<TooltipTrigger asChild>` (for the collapsed-state hover label). The fix: compute `isActive` yourself (`useLocation()` + a plain comparison against the route) and pass `className` as an already-resolved **string**, never a function, to anything that might end up inside `asChild`. Caught by rendering the component in a test and reading the real `outerHTML` (`element.className` printed `"({ isActive }) => cn(...) active"` — the smoking gun), not by staring at the JSX, which looked completely correct. If a similar "the classes I wrote aren't taking effect" report comes up on an `asChild`-wrapped element, check for a function-typed prop before anything else.
 
+## Printing a QR pass — `.print-pass` / `.no-print`, no dedicated print route
+
+**Decided (2026-09-22):** `EPassDialog` and `VisitorBadgeDialog` both got a "Print" button (`window.print()`), using a small `@media print` block in `index.css` rather than a separate print-only page/route: everything on the page is hidden except the element marked `.print-pass` (the QR + name/status block, already on screen in the dialog), and `.no-print` hides UI chrome (dialog header, the Print button itself) that shouldn't end up on paper. Simpler than a dedicated print view since the dialog already has everything needed — printing is just "that, alone, full-page."
+
+## QR check-in scanning — scoped to walk-in visitor badges only, not invite e-passes
+
+**Decided (2026-09-22):** `QrCheckInScanner` (Front Desk, `jsqr` for decoding) reads a `VisitorBadgeDialog` QR — which encodes the visitor's own id — looks the visitor up, and offers Check-In/Check-Out directly. It deliberately does **not** also handle the invite flow's e-pass QR (`EPassDialog`, which encodes an *invite code*, not a visitor id) — what "checking in a pre-approved invite" should actually do (create a new visitor record tied to `sourceInviteId`? transition the invite's own status?) is a real data-model question that hasn't been decided, not something to guess at silently. See `DECISIONS.md` for the full reasoning; extending the scanner to invites is a clear next step once that's answered.
+
+Same explicit-permission pattern as `PhotoCapture` (camera never opens until "Start Scanning" is clicked) and the same ref-timing fix documented there (the `<video>` only mounts once `cameraState` is `'live'`, so `srcObject` has to be attached in an effect keyed on that state, not at the point `getUserMedia()` resolves).
+
 ## Date fields — shadcn Calendar via Popover, never native `<input type="date">`
 
 **Decided (2026-09-22):** every date field is the shared `components/DatePicker.jsx` (a `Popover` + `Calendar` + a `Button` trigger showing the formatted date, `date-fns` for formatting) — not a native `<input type="date">`. The native control's styling can't be themed and looks inconsistent across browsers/OSes, which stood out against everything else being shadcn-themed. Used by `VisitorFilters` (front desk date filter) and `InviteForm` (invite date). Contract: `value`/`onChange` are still plain `'yyyy-MM-dd'` strings, same as the native input, so nothing downstream (Redux filters, validators) needed to change.

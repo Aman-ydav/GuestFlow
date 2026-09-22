@@ -33,8 +33,8 @@ GuestFlow/
 │   │   │   └── index.js         public exports only
 │   │   ├── approval/            Host approve/reject flow
 │   │   ├── invites/             Pre-approval / invite flow
-│   │   ├── front-desk/          Dashboard + guest details + VisitorBadgeDialog (QR badge, generated after approval)
-│   │   └── admin/                Config (limits, offices)
+│   │   ├── front-desk/          Dashboard + guest details + VisitorBadgeDialog (QR badge, generated after approval) + QrCheckInScanner (camera QR scan → check-in/out, walk-in badges only)
+│   │   └── admin/                Config (limits, offices) + ManageHostsSection (add/remove host employees)
 │   ├── components/
 │   │   ├── ui/                  shadcn components (generated + themed here)
 │   │   ├── layout/               AppShell, Sidebar, Topbar, RoleSwitcher

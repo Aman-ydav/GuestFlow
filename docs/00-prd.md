@@ -57,4 +57,8 @@ Out of scope for v1: real backend/auth (see [`01-architecture-and-data.md`](01-a
 - **Illustrations:** curated from unDraw (primary, no attribution needed) + Storyset (secondary, attribution required on free tier), recoloured to the palette. Logo mark is the one AI-generated exception. See `07-image-assets-and-prompts.md`.
 - **`npx skills add https://github.com/Leonxlnx/taste-skill`:** confirmed legitimate (public repo, documented, listed on multiple skill marketplaces) — runs at scaffold time, not a blocking question.
 
-No open questions remaining as of 2026-09-22. Next: scaffold `GuestFlow/`.
+No open questions remaining as of 2026-09-22.
+
+## Status: build complete
+
+All four flows plus Admin are built and working end-to-end (see root `PLAN.md` for the full checklist and `DECISIONS.md` for the dated why-log of every decision made along the way, including a number of real bugs found and fixed during development — the sidebar/dark-mode bugs, the photo-capture ref-timing bug, and the toast color bug are the most instructive for Interview 1). Beyond the original four-flow scope, the build also added: real logo/hero artwork, an interactive landing-page hero, QR badges for both the walk-in and pre-approval paths (with print), camera-based QR check-in scanning at front desk, host/employee management in Admin, and `localStorage` persistence so the mock dataset survives a page refresh. What's still open: restoring the mock dataset's large-N default before final submission (currently turned down for fast manual QA — see `01-architecture-and-data.md`), and recording the demo video/screenshots in `demo/`.

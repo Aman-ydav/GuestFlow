@@ -1,13 +1,8 @@
 # Component Library — shadcn/ui Setup & Theming
 
-## Install (not run yet — plan for when scaffolding is greenlit)
+## Install — done
 
-```bash
-npx shadcn@latest init      # base color: neutral/zinc, CSS variables: yes, style: default
-npx shadcn@latest add --all # every component in one go, per your instruction
-```
-
-If you have a specific config from the shadcn playground (theme JSON / `components.json` tweaks), paste it when we scaffold and it takes priority over the defaults above.
+35 components installed and themed (base color neutral/zinc, CSS variables, "new-york" style). `add --all` itself hit a broken experimental registry block and was replaced with an explicit curated list — see `DECISIONS.md` for that specific fix.
 
 ## Theming after install
 
@@ -60,8 +55,12 @@ shadcn's generated components import specific `lucide-react` icons directly (e.g
 
 `components/ui/select.jsx` was reskinned to match a reference screenshot (iOS-style): the trigger and the open option list render as one seamless rounded card with a colored divider between them (`position="popper"`, `sideOffset=0`, trigger's bottom corners square off on open, content's top corners square off to meet it), bigger item padding, `rounded-lg` item highlight instead of `rounded-sm`. Same precedent as the icon swap — a documented, intentional edit to generated component internals, not a style hack layered on top.
 
+## `sonner.jsx` — a third documented exception, and a real bug it caused
+
+`components/ui/sonner.jsx`'s `Toaster` was edited beyond the icon swap: its `next-themes` import (Next.js-only, broken in Vite) was replaced with the app's own `hooks/useTheme.js` early on, and its inline `style` prop (`--normal-bg`, `--normal-text`, `--normal-border`) had a real bug — those were set to bare `var(--popover)` etc., but `--popover`/`--popover-foreground`/`--border` in `index.css` are bare HSL triplets, not full CSS colors (every other usage wraps them in `hsl(var(--x))`). The unwrapped version is invalid CSS the browser silently drops, so every toast was quietly falling back to Sonner's own built-in colors instead of the app's theme, in both light and dark mode, until caught and fixed (2026-09-22) — see `DECISIONS.md`.
+
 ## Rules
 
-- Aside from the icon swap and the `Select` reskin above, never edit a generated `components/ui/*` file's *logic* — only its default class names, to keep future `shadcn add` updates mergeable. Visual overrides happen via the CSS variables, not by hand-editing component internals.
+- Aside from the icon swap, the `Select` reskin, and `sonner.jsx` above, never edit a generated `components/ui/*` file's *logic* — only its default class names, to keep future `shadcn add` updates mergeable. Visual overrides happen via the CSS variables, not by hand-editing component internals.
 - One icon set (`react-icons`) app-wide, sized 16–20px inside buttons/inputs, one subset only (e.g. stick to `fi`) — see `03-design-system.md`.
 - Every shadcn component used gets checked in dark mode before a screen is marked done.
