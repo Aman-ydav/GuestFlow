@@ -176,3 +176,29 @@
     @apply mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:px-16;
   }
 }
+
+/* Printing a QR pass (badge / e-pass): hide everything on the page except the
+   one element marked .print-pass, and lay that out full-page/centered. Scoped
+   this way (rather than a dedicated print route) because the dialog already
+   has everything needed on screen — print should just be "that, alone." */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-pass,
+  .print-pass * {
+    visibility: visible;
+  }
+  .print-pass {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

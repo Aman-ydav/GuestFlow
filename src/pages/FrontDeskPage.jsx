@@ -1,9 +1,12 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { FiCamera } from 'react-icons/fi'
+import { Button } from '@/components/ui/button'
 import { FlowBanner } from '@/components/FlowBanner'
 import { VisitorFilters } from '@/features/front-desk/components/VisitorFilters'
 import { VisitorTable } from '@/features/front-desk/components/VisitorTable'
 import { GuestDetailsSheet } from '@/features/front-desk/components/GuestDetailsSheet'
+import { QrCheckInScanner } from '@/features/front-desk/components/QrCheckInScanner'
 import {
   fetchVisitors,
   selectVisibleVisitors,
@@ -22,6 +25,7 @@ export default function FrontDeskPage() {
   const allVisitors = useSelector(visitorSelectors.selectAll)
   const overstayMinutes = useSelector(selectOverstayMinutes)
   const selectedVisitorId = useSelector(selectSelectedVisitorId)
+  const [scannerOpen, setScannerOpen] = useState(false)
 
   useEffect(() => {
     dispatch(fetchVisitors())
@@ -43,7 +47,12 @@ export default function FrontDeskPage() {
         }
       />
 
-      <VisitorFilters />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <VisitorFilters />
+        <Button type="button" variant="outline" size="sm" className="shrink-0" onClick={() => setScannerOpen(true)}>
+          <FiCamera className="size-3.5" /> Scan QR
+        </Button>
+      </div>
 
       {status === 'loading' ? (
         <p className="py-10 text-center text-sm text-muted-foreground">Loading visitors…</p>
@@ -56,6 +65,8 @@ export default function FrontDeskPage() {
         open={!!selectedVisitorId}
         onOpenChange={(open) => !open && dispatch(visitorSelected(null))}
       />
+
+      <QrCheckInScanner open={scannerOpen} onOpenChange={setScannerOpen} />
     </div>
   )
 }
