@@ -13,7 +13,7 @@ import { makeInvite } from './makeInvite'
  * Front Desk table's pagination is built for scale either way, this only
  * changes how much data there is to page through during testing.
  */
-export function seedDataset({ hostCount = 8, visitorCount = 40, inviteCount = 15 } = {}) {
+export function seedDataset({ hostCount = 4, visitorCount = 7, inviteCount = 5 } = {}) {
   const hosts = Array.from({ length: hostCount }, (_, i) => makeHost(i))
   const visitors = Array.from({ length: visitorCount }, (_, i) => makeVisitor(i, hosts))
   const invites = Array.from({ length: inviteCount }, (_, i) => makeInvite(i, hosts, visitors))

@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { ROUTES } from '@/constants/routes'
 import { ROLES } from '@/constants/roles'
 import { FLOWS } from '@/lib/flowTheme'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { selectSidebarCollapsed, sidebarToggled } from '@/core/uiSlice'
 
 const NAV_ITEMS = [
@@ -39,14 +40,24 @@ export function Sidebar({ role }) {
       {/* Collapse/expand handle — a hover-highlighted line on the sidebar's edge with
           a resize-style cursor, instead of a chevron button. The button used to sit next
           to the logo in the collapsed header, which didn't leave the logo enough room to
-          read clearly at w-19; a full-height edge handle needs no header space at all. */}
-      <button
-        type="button"
-        onClick={() => dispatch(sidebarToggled())}
-        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        className="absolute inset-y-0 -right-px z-10 w-1.5 cursor-col-resize bg-transparent transition-colors hover:bg-primary/40 focus-visible:bg-primary/60 focus-visible:outline-none"
-      />
+          read clearly at w-19; a full-height edge handle needs no header space at all. A
+          shadcn Tooltip spells out "click to expand/collapse" on hover — a plain color
+          highlight alone didn't make it obvious the line was clickable. */}
+      <TooltipProvider delayDuration={150}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={() => dispatch(sidebarToggled())}
+              aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              className="absolute inset-y-0 -right-px z-10 w-1.5 cursor-col-resize bg-transparent transition-colors hover:bg-primary/40 focus-visible:bg-primary/60 focus-visible:outline-none"
+            />
+          </TooltipTrigger>
+          <TooltipContent side="right">
+            {collapsed ? 'Click to expand sidebar' : 'Click to collapse sidebar'}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto p-3">
         {items.map(({ flow }) => (

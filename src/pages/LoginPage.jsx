@@ -42,11 +42,11 @@ export default function LoginPage() {
     <div className="grid min-h-screen lg:grid-cols-2">
       {/* Left: reuses the landing page's dark hero mood so auth feels like part of
           the same system (Aman: "theme based on landing page design"). */}
-      <div className="relative hidden flex-col items-start justify-center gap-8 overflow-hidden bg-[#0B0D10] p-10 text-white lg:flex">
+      <div className="relative hidden flex-col items-center justify-center gap-8 overflow-hidden bg-[#0B0D10] p-10 text-center text-white lg:flex">
         <Link to={ROUTES.HOME}>
           <img src="/logo-icon.png" alt="GuestFlow" className="h-16 w-auto" />
         </Link>
-        <div>
+        <div className="flex flex-col items-center">
           <img src="/login-ref.png" alt="Isometric illustration of a visitor checking in across a multi-floor office" className="h-auto w-full max-w-xs" />
           <h2 className="mt-6 max-w-sm text-2xl font-bold">Visitor management, without the front-desk chaos.</h2>
           <p className="mt-2 max-w-sm text-sm text-white/60">
