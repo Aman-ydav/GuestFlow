@@ -13,6 +13,10 @@ dist-ssr
 *.local
 .env
 
+# Test suite kept locally for development (build/lint/test verification after
+# every change) but deliberately not pushed to the submitted GitHub repo.
+/tests
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import { FiCamera, FiRefreshCw, FiUpload, FiAlertCircle, FiVideo } from 'react-icons/fi'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -23,6 +24,17 @@ export function PhotoCapture({ value, onChange, error }) {
 
   useEffect(() => stopStream, [stopStream]) // release the camera on unmount only
 
+  // The <video> only mounts once cameraState becomes 'live' (it's behind that
+  // conditional below), so videoRef.current is still null at the point
+  // startCamera() resolves — assigning srcObject there was a no-op and the
+  // stream never reached any <video> element. Attaching it here, in an effect
+  // keyed on cameraState, runs after React has actually mounted the element.
+  useEffect(() => {
+    if (cameraState === 'live' && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current
+    }
+  }, [cameraState])
+
   const startCamera = async () => {
     if (!navigator.mediaDevices?.getUserMedia) {
       setCameraState('unsupported')
@@ -32,7 +44,6 @@ export function PhotoCapture({ value, onChange, error }) {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
       streamRef.current = stream
-      if (videoRef.current) videoRef.current.srcObject = stream
       setCameraState('live')
     } catch {
       setCameraState('denied')
@@ -42,6 +53,14 @@ export function PhotoCapture({ value, onChange, error }) {
   const capture = () => {
     const video = videoRef.current
     if (!video) return
+    // The stream is attached but hasn't decoded a first frame yet — capturing
+    // now would draw a blank 0x0 canvas. Extremely rare after the ref-timing
+    // fix above (by the time a user sees the live feed and clicks, there's
+    // always a frame), but worth a clear message instead of a silently blank photo.
+    if (video.videoWidth === 0 || video.videoHeight === 0) {
+      toast.error('Camera is still starting up — wait a moment and try again.')
+      return
+    }
     const canvas = document.createElement('canvas')
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
@@ -107,7 +126,12 @@ export function PhotoCapture({ value, onChange, error }) {
             <FiVideo className="size-3.5" /> Start Camera
           </Button>
         ) : null}
-        {!value && cameraState !== 'starting' && (
+        {/* Upload is a fallback for when the camera genuinely can't be used
+            (denied/unsupported) — not a parallel shortcut around it. A kiosk's
+            mandatory photo exists to verify who actually showed up; letting
+            someone upload an arbitrary file whenever a working camera is
+            sitting right there would defeat that. */}
+        {!value && (cameraState === 'denied' || cameraState === 'unsupported') && (
           <>
             <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
               <FiUpload className="size-3.5" /> Upload instead

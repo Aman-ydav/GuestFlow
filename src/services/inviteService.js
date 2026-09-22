@@ -1,5 +1,5 @@
 import { apiClient, USE_MOCK_API } from './apiClient'
-import db, { delay, maybeFail } from '@/mocks/mockApiStore'
+import db, { delay, maybeFail, persist } from '@/mocks/mockApiStore'
 
 const dayKey = (hostId, isoDate) => `${hostId}|${isoDate.slice(0, 10)}`
 
@@ -38,6 +38,7 @@ export async function createInvite(fields) {
       ...fields,
     }
     db.invites.set(id, invite)
+    persist()
     return invite
   }
   return apiClient.post('/invites', fields)
@@ -52,6 +53,7 @@ export async function cancelInvite(id) {
     if (invite.status !== 'invited') throw { message: `Only an active invite can be cancelled`, status: 409 }
     const updated = { ...invite, status: 'cancelled' }
     db.invites.set(id, updated)
+    persist()
     return updated
   }
   return apiClient.post(`/invites/${id}/cancel`)

@@ -22,9 +22,18 @@ const Toaster = ({
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
+          // --popover/--popover-foreground/--border are bare HSL triplets
+          // ("0 0% 100%"), not full color values — every other token usage in
+          // this app goes through Tailwind's `hsl(var(--x))` wrapping
+          // (index.css's @theme inline block), but this inline style prop
+          // bypasses that, so it has to wrap them itself. Without hsl(...),
+          // `background: 0 0% 100%` is an invalid CSS value the browser
+          // silently drops, and every toast fell back to Sonner's own
+          // built-in colors instead of matching the app's actual theme, in
+          // both light and dark mode.
+          "--normal-bg": "hsl(var(--popover))",
+          "--normal-text": "hsl(var(--popover-foreground))",
+          "--normal-border": "hsl(var(--border))",
           "--border-radius": "var(--radius)"
         }
       }

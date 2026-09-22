@@ -4,6 +4,8 @@
 
 Vite scaffolded flat — `src/` sits directly at the `GuestFlow/` repo root, alongside `public/`, `docs/`, `demo/`, `package.json`, `vite.config.js`, `index.html`. No `app/` subfolder.
 
+**`tests/` (2026-09-22, gitignored — not pushed to the submitted repo):** every `*.test.{js,jsx}` file, flat, one per file/behavior being tested, importing the code under test via the `@/` alias rather than being colocated next to it. Aman's call — the grading rubric (`assignment/instructions-and-evaluation.md`) doesn't list automated tests as a criterion, and he didn't want them visible in the GitHub submission — but they're kept locally since they caught several real bugs during development (see `DECISIONS.md`) and are still run after every change. `vite.config.js`'s `test.setupFiles` points at `./tests/setup.js`; a truly fresh clone of the *pushed* repo won't have this folder, so `npm test` won't run there — expected, not a bug, given the above.
+
 ```
 GuestFlow/
 ├── public/
@@ -55,8 +57,8 @@ GuestFlow/
 │   │   ├── NotFoundPage.jsx / RouteErrorPage.jsx
 │   ├── hooks/                    cross-feature hooks: useDebounce.js, useTheme.js (dashboard-only theme, see 03-design-system.md)
 │   ├── lib/                      utils.js (cn helper), dateUtils.js, statusTokens.js, statusTransitions.js, validators.js, avatarPalette.js, flowTheme.js (ONE color per flow — see 03-design-system.md)
-│   ├── services/                 apiClient.js, visitorService.js, inviteService.js, hostService.js
-│   ├── mocks/                    see 01-architecture-and-data.md
+│   ├── services/                 apiClient.js, visitorService.js, inviteService.js, hostService.js, configService.js
+│   ├── mocks/                    mockApiStore.js (persisted to localStorage, see 01-architecture-and-data.md), config.mock.js, generators/ (makeHost/makeVisitor/makeInvite/seedDataset — the only source of hosts/visitors/invites now; the old hosts.mock.js/visitors.mock.js/invites.mock.js/_seed.js wrapper files were deleted as dead code once mockApiStore.js started calling seedDataset() directly)
 │   ├── constants/                routes.js (incl. LOGIN), visitTypes.js, roles.js
 │   ├── assets/                   local images that aren't public/ (rare — prefer public/)
 │   ├── index.css                 ALL global styles, theme tokens, Tailwind layers — single source
@@ -74,7 +76,7 @@ GuestFlow/
 | Hook | camelCase, `use` prefix | `useDebounce.js` |
 | Redux slice | camelCase + `Slice` suffix, colocated in its feature | `visitorsSlice.js` |
 | Service | camelCase + `Service` suffix | `visitorService.js` |
-| Mock data file | camelCase + `.mock.js` | `visitors.mock.js` |
+| Mock data file | camelCase + `.mock.js` | `config.mock.js` |
 | Mock generator | `make<Entity>.js` | `makeVisitor.js` |
 | Constant file | camelCase file, `SCREAMING_SNAKE_CASE` exports | `constants/visitTypes.js` → `export const VISIT_TYPES = {...}` |
 | Utility function | camelCase, verb-first | `formatVisitTime()`, `isOverstay()` |

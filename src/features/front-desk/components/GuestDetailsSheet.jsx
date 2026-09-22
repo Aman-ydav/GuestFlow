@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
-import { FiCheckCircle, FiCircle, FiLoader, FiLogOut, FiChevronDown, FiSmartphone } from 'react-icons/fi'
+import { FiCheckCircle, FiCircle, FiLoader, FiLogIn, FiLogOut, FiChevronDown, FiSmartphone } from 'react-icons/fi'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -50,6 +50,17 @@ function GuestDetailsBody({ visitorId }) {
 
   if (!visitor) return null
   const displayStatus = getDisplayStatus(visitor, overstayMinutes)
+  const canCheckIn = visitor.status === 'approved'
+  const canCheckOut = visitor.status === 'checked-in'
+
+  const handleCheckIn = async () => {
+    try {
+      await dispatch(transitionVisitor({ id: visitor.id, to: 'checked-in' })).unwrap()
+      toast.success(`${visitor.name} checked in`)
+    } catch (message) {
+      toast.error(message || 'Could not check in this visitor')
+    }
+  }
 
   const handleCheckOut = async () => {
     try {
@@ -151,14 +162,20 @@ function GuestDetailsBody({ visitorId }) {
       </div>
 
       <div className="border-t border-border p-4">
-        <Button
-          className="btn-cta w-full"
-          disabled={visitor.status !== 'checked-in' || mutating}
-          onClick={handleCheckOut}
-        >
-          {mutating ? <FiLoader className="size-4 animate-spin" /> : <FiLogOut className="size-4" />}
-          {visitor.status === 'checked-in' ? 'Check-Out' : 'Check-Out (not checked in)'}
-        </Button>
+        {/* Contextual: Check-In once approved (arriving at the desk), Check-Out
+            once checked in — never both, and never enabled outside those two
+            states (pending/rejected/checked-out have no forward action here). */}
+        {canCheckIn ? (
+          <Button className="btn-cta w-full" disabled={mutating} onClick={handleCheckIn}>
+            {mutating ? <FiLoader className="size-4 animate-spin" /> : <FiLogIn className="size-4" />}
+            Check-In
+          </Button>
+        ) : (
+          <Button className="btn-cta w-full" disabled={!canCheckOut || mutating} onClick={handleCheckOut}>
+            {mutating ? <FiLoader className="size-4 animate-spin" /> : <FiLogOut className="size-4" />}
+            {canCheckOut ? 'Check-Out' : 'Check-Out (not checked in)'}
+          </Button>
+        )}
       </div>
 
       <VisitorBadgeDialog visitor={visitor} host={host} open={badgeOpen} onOpenChange={setBadgeOpen} />

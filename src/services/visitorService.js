@@ -1,5 +1,5 @@
 import { apiClient, USE_MOCK_API } from './apiClient'
-import db, { delay, maybeFail } from '@/mocks/mockApiStore'
+import db, { delay, maybeFail, persist } from '@/mocks/mockApiStore'
 import { canTransition } from '@/lib/statusTransitions'
 
 export async function listVisitors(params = {}) {
@@ -36,6 +36,7 @@ export async function registerVisitor(fields) {
       ...fields,
     }
     db.visitors.set(id, visitor)
+    persist()
     return visitor
   }
   return apiClient.post('/visitors', fields)
@@ -61,6 +62,7 @@ export async function transitionVisitor(id, to, actorId = 'system') {
     }
     db.visitors.set(id, updated)
     db.auditEvents.push({ id: `evt-${Date.now()}`, visitorId: id, action: to, actorId, at: now })
+    persist()
     return updated
   }
   return apiClient.post(`/visitors/${id}/transition`, { to })

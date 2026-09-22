@@ -1,12 +1,24 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
-import { FiLoader, FiSave, FiPlus, FiX, FiMapPin } from 'react-icons/fi'
+import { FiLoader, FiSave, FiPlus, FiX, FiMapPin, FiRefreshCw } from 'react-icons/fi'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { resetMockData } from '@/mocks/mockApiStore'
 import { fetchConfig, updateConfig, selectConfig } from '../configSlice'
 
 export function AdminSettingsForm() {
@@ -119,6 +131,39 @@ function AdminSettingsFormFields({ config }) {
         {saving ? <FiLoader className="size-4 animate-spin" /> : <FiSave className="size-4" />}
         {saving ? 'Saving…' : 'Save Settings'}
       </Button>
+
+      <Card className="border-destructive/30">
+        <CardContent className="flex flex-col gap-3 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-sm font-medium">Reset Demo Data</p>
+            <p className="text-xs text-muted-foreground">
+              Wipes everything you've approved/rejected/checked in and reseeds a fresh mock dataset. Demo-only — there's no undo.
+            </p>
+          </div>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button type="button" variant="outline" className="shrink-0 border-destructive/30 text-destructive hover:bg-destructive/10">
+                <FiRefreshCw className="size-3.5" /> Reset Demo Data
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Reset all demo data?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Every visitor, invite, and setting you've changed this session will be discarded and replaced with a fresh
+                  seeded dataset. This can't be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={resetMockData} className="bg-destructive text-white hover:bg-destructive/90">
+                  Reset
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </CardContent>
+      </Card>
     </form>
   )
 }
