@@ -7,9 +7,10 @@ Vite scaffolded flat — `src/` sits directly at the `GuestFlow/` repo root, alo
 ```
 GuestFlow/
 ├── public/
-│   ├── illustrations/          kebab-case.svg — see 07-image-assets-and-prompts.md
-│   ├── logo/                   guestflow-mark.svg, guestflow-wordmark.svg
-│   └── favicon.svg
+│   ├── full-logo.png            real logo lockup (icon + wordmark) — spacious/light contexts
+│   ├── logo-icon.png            icon-only mark, transparent — compact/dark contexts + favicon
+│   ├── hero.png                 landing page hero illustration
+│   └── login-ref.png            circular-badge illustration for the login page's dark panel
 ├── src/
 │   ├── core/
 │   │   ├── App.jsx              root component: Providers + RouterProvider
@@ -18,7 +19,7 @@ GuestFlow/
 │   │   ├── providers.jsx        Redux Provider
 │   │   └── uiSlice.js           theme/role/filters — core app state, not a "feature"
 │   ├── components/
-│   │   └── marketing/           MarketingNavbar, Footer, MarketingLayout, HeroIllustration — the public landing page's own components, not part of components/ui
+│   │   └── marketing/           MarketingNavbar, Footer, MarketingLayout — the public landing page's own components, not part of components/ui
 │   ├── store/
 │   │   ├── index.js             configureStore, combines feature slices
 │   │   └── rootReducer.js
@@ -39,12 +40,12 @@ GuestFlow/
 │   │   ├── FlowBanner.jsx        colored page header, one per flow (see 03-design-system.md)
 │   │   ├── BannerDecoration.jsx  seeded decorative SVG scatter used inside FlowBanner
 │   │   ├── AvatarInitials.jsx
+│   │   ├── DatePicker.jsx        shared single-date picker (Popover + shadcn Calendar) — replaces native <input type="date"> everywhere
 │   │   ├── DataTable/            shared table (see 06-component-library-shadcn.md)
 │   │   └── MultiSelectCombobox/  shared custom combobox
 │   ├── pages/
 │   │   ├── LandingPage.jsx        marketing home (/)
-│   │   ├── LoginPage.jsx          split-screen sign-in — sets role/host, does NOT gate /app/* (see 03-design-system.md)
-│   │   ├── SignupPage.jsx         split-screen mock signup
+│   │   ├── LoginPage.jsx          split-screen sign-in — sets role/host, does NOT gate /app/* (see 03-design-system.md); no signup page exists
 │   │   ├── KioskPage.jsx
 │   │   ├── HostInboxPage.jsx
 │   │   ├── InvitesPage.jsx
@@ -56,7 +57,7 @@ GuestFlow/
 │   ├── lib/                      utils.js (cn helper), dateUtils.js, statusTokens.js, statusTransitions.js, validators.js, avatarPalette.js, flowTheme.js (ONE color per flow — see 03-design-system.md)
 │   ├── services/                 apiClient.js, visitorService.js, inviteService.js, hostService.js
 │   ├── mocks/                    see 01-architecture-and-data.md
-│   ├── constants/                routes.js (incl. LOGIN/SIGNUP), visitTypes.js, roles.js
+│   ├── constants/                routes.js (incl. LOGIN), visitTypes.js, roles.js
 │   ├── assets/                   local images that aren't public/ (rare — prefer public/)
 │   ├── index.css                 ALL global styles, theme tokens, Tailwind layers — single source
 │   └── main.jsx

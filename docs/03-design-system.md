@@ -15,15 +15,15 @@
 
 Colors: registration = coral, approvals = lime, invites = primary/teal, front desk = ink, admin = zinc. Never hardcode one of these elsewhere — add a new flow to `FLOWS` instead.
 
-## Logo — wordmark only, no icon badge
+## Logo — real provided artwork, two variants
 
-**Decided:** no square "G" icon mark anywhere (navbar, sidebar, footer) — just the wordmark, "Guest" in `text-foreground`, "Flow" in `text-primary`, `font-bold tracking-tight`. Matches the reference's own clean logotype treatment. The one place an icon mark still exists is `public/logo/guestflow-mark.svg` / the favicon (see `07-image-assets-and-prompts.md`), which is a separate, smaller use case (browser tab, not in-page branding).
+**Decided (2026-09-22, superseding the earlier "text wordmark only" call):** Aman supplied real logo artwork in `public/` — `full-logo.png` (icon + "GuestFlow" wordmark lockup, for spacious/light contexts) and `logo-icon.png` (icon mark only, transparent background, for compact/dark contexts). Rule: **full lockup wherever there's room and a light-enough surface** — desktop marketing navbar, mobile nav Sheet header, expanded sidebar, footer, the login page's mobile-only wordmark slot; **icon-only where space is tight or the surface is dark** — the marketing navbar below the `sm` breakpoint, the collapsed sidebar, the browser favicon (`index.html`), and the login page's dark left panel (dark ink text in the full lockup isn't legible on `#0B0D10`). Never re-derive the wordmark as styled text — always the provided image files. The old hand-coded `HeroIllustration.jsx` SVG and its `--gf-*` CSS custom properties were removed once real artwork replaced every usage.
 
-## Site structure: marketing (`/`), auth (`/login`, `/signup`), and product (`/app/*`)
+## Site structure: marketing (`/`), auth (`/login`), and product (`/app/*`)
 
-`/` is the public landing page (navbar, hero, feature/flow cards, CTA banner) styled closely on the reference mood — see `MarketingNavbar`/`MarketingLayout`/`LandingPage`. `/login` and `/signup` are standalone split-screen pages (dark branded panel + light form) reusing the same visual language, picking `ui.role`/`currentHostId` exactly like the in-app `RoleSwitcher` — **not a hard gate**, so the landing page's "no fake demo form, dashboard is live" CTA stays true either way. The actual product (kiosk, host inbox, invites, front desk, admin) lives under `/app/*` using the dashboard shell (`AppShell`/`Sidebar`/`Topbar`). Every CTA links to a real, working route — no fabricated testimonials/client logos; where the reference has a testimonial, GuestFlow has an honest "About this project" note instead.
+`/` is the public landing page (navbar, hero, feature/flow cards, CTA banner) styled closely on the reference mood — see `MarketingNavbar`/`MarketingLayout`/`LandingPage`. `/login` is a standalone split-screen page (dark branded panel + light form) reusing the same visual language, picking `ui.role`/`currentHostId` exactly like the in-app `RoleSwitcher` — **not a hard gate**, so the landing page's "no fake demo form, dashboard is live" CTA stays true either way. There is no `/signup` — Aman decided accounts aren't a real concept in this demo, so the page and route were removed (2026-09-22); `/signup` now renders the 404 page. The actual product (kiosk, host inbox, invites, front desk, admin) lives under `/app/*` using the dashboard shell (`AppShell`/`Sidebar`/`Topbar`). Every CTA links to a real, working route — no fabricated testimonials/client logos; where the reference has a testimonial, GuestFlow has an honest "About this project" note instead.
 
-**The marketing hero (and the login/signup left panel) are always dark** — a fixed brand treatment (`bg-[#0B0D10]` literal), independent of the theme toggle below. It mirrors the reference's own fixed dark hero.
+**The marketing hero and the login page's left panel are always dark** — a fixed brand treatment (`bg-[#0B0D10]` literal), independent of the theme toggle below. It mirrors the reference's own fixed dark hero. The landing hero uses `public/hero.png`; the login panel uses `public/login-ref.png` (a circular-badge variant of the same illustration, framed to echo the logo mark's ring motif) — both real provided artwork, not the old hand-coded SVG.
 
 ## Theme: dark/light toggle — dashboard only, never the marketing site
 
@@ -95,6 +95,14 @@ Default Tailwind body text is 16px; GuestFlow is a data-dense enterprise tool (s
 - **Primary CTAs are pill-shaped** (`rounded-full`) — the one deliberate echo of the reference's "Book a demo" button; everything else uses `rounded-lg`.
 - Cards: 1px `--border`, no shadow-heavy elevation — flat design, depth from color/spacing not drop-shadows.
 
+## Date fields — shadcn Calendar via Popover, never native `<input type="date">`
+
+**Decided (2026-09-22):** every date field is the shared `components/DatePicker.jsx` (a `Popover` + `Calendar` + a `Button` trigger showing the formatted date, `date-fns` for formatting) — not a native `<input type="date">`. The native control's styling can't be themed and looks inconsistent across browsers/OSes, which stood out against everything else being shadcn-themed. Used by `VisitorFilters` (front desk date filter) and `InviteForm` (invite date). Contract: `value`/`onChange` are still plain `'yyyy-MM-dd'` strings, same as the native input, so nothing downstream (Redux filters, validators) needed to change.
+
+## Sidebar collapse — an edge handle, not a chevron button
+
+**Decided (2026-09-22, superseding the earlier chevron-button toggle):** the collapse/expand control is a full-height, hover-highlighted line on the sidebar's right border (`cursor-col-resize`, no icon) instead of a button sitting in the header next to the logo. The button used to fight the logo for space in the collapsed header (`w-19`) — the edge handle needs no header space at all, so the logo (icon-only when collapsed, full lockup when expanded) can sit alone and stay legible. Same `sidebarToggled()` action either way; `aria-label`/`title` still say "Expand sidebar"/"Collapse sidebar" for accessibility.
+
 ## Iconography
 
 **Decided: `react-icons` everywhere** — including inside shadcn's own copied components. shadcn's generated components hardcode a handful of `lucide-react` icons internally (the chevron in `Select`, the `X` in `Dialog`/`Sheet`, the check in `Checkbox`, etc.); since those components are copied source we own (not a dependency), swap those specific imports to the `react-icons` equivalent too when theming each component after install — see `06-component-library-shadcn.md`. Rule either way: **one icon set app-wide**, 18–20px default size inside buttons/inputs, consistent stroke/fill style (pick one `react-icons` subset — e.g. `react-icons/fi` (Feather-style outline) — and stay in it; don't mix `fi`/`md`/`bi` subsets on the same screen).
@@ -103,13 +111,9 @@ Default Tailwind body text is 16px; GuestFlow is a data-dense enterprise tool (s
 
 **Decided: sourced from [unDraw](https://undraw.co) (primary) and [Storyset](https://storyset.com) (secondary)**, recoloured to the palette above — not AI-generated (the one exception is the logo mark, which no stock library has). Full sourcing plan, license notes, and the list of needed illustrations: `07-image-assets-and-prompts.md`. Used only for empty states, the kiosk landing screen, and error pages — never as decorative filler.
 
-## Theme: light-only, by design
-
-**Decided (superseding an earlier draft of this doc): no dark mode, no toggle, ever.** Aman's explicit call after seeing the build — "keep the white theme default and do not make changes according to theme." `index.css` has no `.dark` block at all (deleted, not just unused); `ui.theme` in Redux is a fixed `'light'` field kept only so `sonner`'s `Toaster` has a `theme` prop to read (see `hooks/useTheme.js`) — nothing in the UI can change it. Don't re-add a toggle without this being revisited explicitly.
-
 ## Feedback rules (User Experience + Error Handling criteria)
 
 - Every user action results in one of: a toast (success/error), an inline validation message, a status badge change, or a disabled-then-enabled button — never a silent no-op.
-- Loading states: skeleton rows for tables/cards, spinner only inside buttons mid-action.
+- Loading states: skeleton rows for tables/cards, spinner only inside buttons mid-action. `LoginPage`'s Sign In button is the reference pattern — `disabled` while pending, `FiLoader` spin icon (`animate-spin`) + "Signing in…" label swapped in for the idle label, restored (or navigated away) once the action resolves.
 - Errors are human-readable ("Daily pre-approval limit reached for this host" not "Error 409").
 - Destructive actions (reject, cancel invite) get a confirm step (shadcn `AlertDialog`).

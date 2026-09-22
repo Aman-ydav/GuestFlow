@@ -2,25 +2,14 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'sonner'
-import { FiArrowRight, FiLogIn } from 'react-icons/fi'
+import { FiArrowRight, FiLoader } from 'react-icons/fi'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
-import { HeroIllustration } from '@/components/marketing/HeroIllustration'
 import { ROUTES } from '@/constants/routes'
-import { ROLES, ROLE_LABELS, ALL_ROLES } from '@/constants/roles'
+import { ROLES, ROLE_LABELS, ALL_ROLES, ROLE_LANDING } from '@/constants/roles'
 import { roleChanged, currentHostChanged } from '@/core/uiSlice'
 import { fetchHosts, hostSelectors } from '@/features/approval/hostsSlice'
-
-// Where each role naturally lands — mirrors how the problem statement
-// describes each user's first screen (visitor → kiosk, host → their inbox,
-// security/front-desk → the dashboard, admin → the dashboard with full access).
-const ROLE_LANDING = {
-  [ROLES.VISITOR]: ROUTES.KIOSK,
-  [ROLES.HOST]: ROUTES.HOST_INBOX,
-  [ROLES.FRONT_DESK]: ROUTES.FRONT_DESK,
-  [ROLES.ADMIN]: ROUTES.FRONT_DESK,
-}
 
 export default function LoginPage() {
   const dispatch = useDispatch()
@@ -28,6 +17,7 @@ export default function LoginPage() {
   const hosts = useSelector(hostSelectors.selectAll)
   const [role, setRole] = useState(ROLES.FRONT_DESK)
   const [hostId, setHostId] = useState('')
+  const [signingIn, setSigningIn] = useState(false)
 
   useEffect(() => {
     if (hosts.length === 0) dispatch(fetchHosts())
@@ -37,36 +27,40 @@ export default function LoginPage() {
 
   const handleSignIn = (e) => {
     e.preventDefault()
-    dispatch(roleChanged(role))
-    if (needsHost) dispatch(currentHostChanged(hostId || hosts[0]?.id || null))
-    toast.success(`Signed in as ${ROLE_LABELS[role]}`)
-    navigate(ROLE_LANDING[role])
+    setSigningIn(true)
+    // Brief simulated delay so sign-in feels like it did something real,
+    // rather than an instant no-op redirect.
+    setTimeout(() => {
+      dispatch(roleChanged(role))
+      if (needsHost) dispatch(currentHostChanged(hostId || hosts[0]?.id || null))
+      toast.success(`Signed in as ${ROLE_LABELS[role]}`)
+      navigate(ROLE_LANDING[role])
+    }, 500)
   }
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       {/* Left: reuses the landing page's dark hero mood so auth feels like part of
           the same system (Aman: "theme based on landing page design"). */}
-      <div className="relative hidden flex-col justify-between overflow-hidden bg-[#0B0D10] p-10 text-white lg:flex">
-        <Link to={ROUTES.HOME} className="text-lg font-bold tracking-tight">
-          Guest<span className="text-brand-teal">Flow</span>
+      <div className="relative hidden flex-col items-start justify-center gap-8 overflow-hidden bg-[#0B0D10] p-10 text-white lg:flex">
+        <Link to={ROUTES.HOME}>
+          <img src="/logo-icon.png" alt="GuestFlow" className="h-16 w-auto" />
         </Link>
         <div>
-          <HeroIllustration className="h-auto w-full max-w-sm" />
+          <img src="/login-ref.png" alt="Isometric illustration of a visitor checking in across a multi-floor office" className="h-auto w-full max-w-xs" />
           <h2 className="mt-6 max-w-sm text-2xl font-bold">Visitor management, without the front-desk chaos.</h2>
           <p className="mt-2 max-w-sm text-sm text-white/60">
             Sign in as the role you want to see — every screen behaves the way the actual VMS spec describes it for that user.
           </p>
         </div>
-        <p className="text-xs text-white/40">Demo-only — no real accounts, no passwords stored anywhere.</p>
       </div>
 
       {/* Right: the actual form, in the light theme (matches "keep white default" on non-dashboard pages) */}
       <div className="flex items-center justify-center px-6 py-16">
         <form onSubmit={handleSignIn} className="w-full max-w-sm space-y-6">
           <div className="lg:hidden">
-            <Link to={ROUTES.HOME} className="text-lg font-bold tracking-tight text-foreground">
-              Guest<span className="text-primary">Flow</span>
+            <Link to={ROUTES.HOME}>
+              <img src="/full-logo.png" alt="GuestFlow" className="h-7 w-auto" />
             </Link>
           </div>
           <div>
@@ -96,13 +90,16 @@ export default function LoginPage() {
             </div>
           )}
 
-          <Button type="submit" className="btn-cta w-full">
-            <FiLogIn className="size-4" /> Sign In
+          <Button type="submit" className="btn-cta w-full" disabled={signingIn}>
+            {signingIn ? (
+              <>
+                <FiLoader className="size-4 animate-spin" /> Signing in…
+              </>
+            ) : (
+              'Sign In'
+            )}
           </Button>
 
-          <p className="text-center text-sm text-muted-foreground">
-            New here? <Link to={ROUTES.SIGNUP} className="font-medium text-primary hover:underline">Create an account</Link>
-          </p>
           <p className="text-center text-xs text-muted-foreground">
             Just browsing? <Link to={ROUTES.FRONT_DESK} className="text-primary hover:underline">Skip straight to the live demo <FiArrowRight className="inline size-3" /></Link>
           </p>

@@ -45,7 +45,7 @@ src/mocks/
 
 **Rules:**
 - Components **never** `import` from `mocks/` directly — always through `services/`. That's the whole point of the boundary.
-- The seed dataset defaults to a **large N** (several thousand visitors) specifically so performance work (memoised selectors, virtualization, pagination) has something real to prove itself against — small mock data hides the problems the "Performance" evaluation criterion is checking for.
+- The seed dataset was designed to default to a **large N** (several thousand visitors) specifically so performance work (memoised selectors, virtualization, pagination) has something real to prove itself against — small mock data hides the problems the "Performance" evaluation criterion is checking for. **Temporarily turned down to a minimal N (2026-09-22, Aman: "keep very less mock data for now")** — `seedDataset()` in `mocks/generators/seedDataset.js` now defaults to 8 hosts / 40 visitors / 15 invites, for fast manual QA. **Restore the large defaults before final submission** so the Performance criterion actually has scale to demonstrate against — the pagination logic itself doesn't change either way, only how much data there is to page through.
 - `mockApiStore.js` is genuinely mutable (a `Map` keyed by id) so approve/reject/check-in actually persist for the session — not just a static read-only array.
 
 ## If/when a real backend is added (Phase 2, only if confirmed)

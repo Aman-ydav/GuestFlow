@@ -30,13 +30,11 @@ export default function KioskPage() {
           </Button>
         </div>
       ) : (
-        <div className="mx-auto max-w-2xl">
-          <Card>
-            <CardContent className="pt-6">
-              <RegistrationForm onRegistered={setLastRegistered} />
-            </CardContent>
-          </Card>
-        </div>
+        <Card>
+          <CardContent className="pt-6">
+            <RegistrationForm onRegistered={setLastRegistered} />
+          </CardContent>
+        </Card>
       )}
     </div>
   )

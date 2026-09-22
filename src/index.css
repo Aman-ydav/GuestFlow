@@ -60,18 +60,6 @@
   --warning-foreground: 0 0% 100%;
   --info: 217 91% 55%;
   --info-foreground: 0 0% 100%;
-
-  /* Illustration-only fills (HeroIllustration) — plain hex, not HSL triplets,
-     since they're consumed directly as SVG fill="var(...)", not via @theme. */
-  --gf-teal: #1EA6A0;
-  --gf-teal-mid: #178582;
-  --gf-teal-dark: #0F6664;
-  --gf-coral: #F4527A;
-  --gf-ink: #14213A;
-  --gf-card: #FFFFFF;
-  --gf-card-mid: #E8EAF0;
-  --gf-card-dark: #D2D5E0;
-  --gf-line: #14213A;
 }
 
 .dark {

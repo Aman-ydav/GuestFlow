@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { MultiSelectCombobox } from '@/components/MultiSelectCombobox'
+import { DatePicker } from '@/components/DatePicker'
 import { VISIT_TYPES } from '@/constants/visitTypes'
 import { selectConfig } from '@/features/admin/configSlice'
 import { selectCurrentHostId } from '@/core/uiSlice'
@@ -127,7 +128,7 @@ export function InviteForm() {
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="space-y-1.5">
           <Label htmlFor="date">Date *</Label>
-          <Input id="date" type="date" value={values.date} onChange={setFromEvent('date')} onBlur={blur('date')} aria-invalid={!!showError('date')} />
+          <DatePicker id="date" value={values.date} onChange={set('date')} onBlur={blur('date')} aria-invalid={!!showError('date')} />
           {showError('date') && <p className="text-xs text-destructive">{errors.date}</p>}
         </div>
         <div className="space-y-1.5">

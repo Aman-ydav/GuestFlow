@@ -4,7 +4,6 @@ import { MarketingLayout } from '@/components/marketing/MarketingLayout'
 import { ROUTES } from '@/constants/routes'
 import LandingPage from '@/pages/LandingPage'
 import LoginPage from '@/pages/LoginPage'
-import SignupPage from '@/pages/SignupPage'
 import KioskPage from '@/pages/KioskPage'
 import HostInboxPage from '@/pages/HostInboxPage'
 import InvitesPage from '@/pages/InvitesPage'
@@ -29,12 +28,12 @@ export const routes = [
     errorElement: <RouteErrorPage />,
     children: [{ index: true, element: <LandingPage /> }],
   },
-  // Login/Signup are standalone (their own split-screen layout, no navbar/footer
-  // chrome) but real: picking a role there sets ui.role/currentHostId exactly like
-  // the in-app RoleSwitcher. Not a hard gate on /app/* — the landing page's "no
-  // fake demo form, dashboard is live" promise stays true either way.
+  // Login is standalone (its own split-screen layout, no navbar/footer chrome)
+  // but real: picking a role there sets ui.role/currentHostId exactly like the
+  // in-app RoleSwitcher. Not a hard gate on /app/* — the landing page's "no fake
+  // demo form, dashboard is live" promise stays true either way. There is no
+  // signup page — accounts aren't a real concept in this demo.
   { path: '/login', element: <LoginPage />, errorElement: <RouteErrorPage /> },
-  { path: '/signup', element: <SignupPage />, errorElement: <RouteErrorPage /> },
   {
     path: '/app',
     element: <AppShell />,

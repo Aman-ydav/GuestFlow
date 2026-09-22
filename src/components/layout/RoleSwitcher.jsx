@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { FiUser, FiBriefcase } from 'react-icons/fi'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { roleChanged, currentHostChanged, selectRole, selectCurrentHostId } from '@/core/uiSlice'
 import { fetchHosts, hostSelectors } from '@/features/approval/hostsSlice'
-import { ROLE_LABELS, ALL_ROLES } from '@/constants/roles'
+import { ROLE_LABELS, ALL_ROLES, ROLE_LANDING } from '@/constants/roles'
 
 /**
  * Demo-only role switcher — there is no real auth in this build (see
@@ -17,6 +18,7 @@ export function RoleSwitcher() {
   const currentHostId = useSelector(selectCurrentHostId)
   const hosts = useSelector(hostSelectors.selectAll)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (hosts.length === 0) dispatch(fetchHosts())
@@ -27,6 +29,14 @@ export function RoleSwitcher() {
       dispatch(currentHostChanged(hosts[0].id))
     }
   }, [role, currentHostId, hosts, dispatch])
+
+  // The page you were on for the old role may not make sense for the new one
+  // (e.g. an Admin on /app/admin switching to Host) — land on the new role's
+  // own home screen instead of leaving the URL where it was.
+  const handleRoleChange = (next) => {
+    dispatch(roleChanged(next))
+    navigate(ROLE_LANDING[next])
+  }
 
   const showHostPicker = role === 'host' || role === 'admin'
 
@@ -47,7 +57,7 @@ export function RoleSwitcher() {
           </SelectContent>
         </Select>
       )}
-      <Select value={role} onValueChange={(next) => dispatch(roleChanged(next))}>
+      <Select value={role} onValueChange={handleRoleChange}>
         <SelectTrigger className="w-40" aria-label="Switch role (demo only)">
           <FiUser className="size-4 text-muted-foreground" />
           <SelectValue />

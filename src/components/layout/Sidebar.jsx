@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
-import { FiChevronsLeft, FiChevronsRight } from 'react-icons/fi'
 import { cn } from '@/lib/utils'
 import { ROUTES } from '@/constants/routes'
 import { ROLES } from '@/constants/roles'
@@ -23,25 +22,31 @@ export function Sidebar({ role }) {
   return (
     <aside
       className={cn(
-        'hidden shrink-0 flex-col border-r border-border bg-card transition-[width] duration-300 ease-in-out md:flex',
+        'relative hidden shrink-0 flex-col border-r border-border bg-card transition-[width] duration-300 ease-in-out md:flex',
         collapsed ? 'w-19' : 'w-64'
       )}
     >
-      <div className={cn('flex h-16 items-center border-b border-border', collapsed ? 'justify-center px-2' : 'justify-between px-5')}>
-        {!collapsed && (
-          <Link to={ROUTES.HOME} className="text-lg font-bold tracking-tight text-foreground">
-            Guest<span className="text-primary">Flow</span>
-          </Link>
-        )}
-        <button
-          type="button"
-          onClick={() => dispatch(sidebarToggled())}
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className="flex size-8 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-        >
-          {collapsed ? <FiChevronsRight className="size-4" /> : <FiChevronsLeft className="size-4" />}
-        </button>
+      <div className={cn('flex h-16 items-center border-b border-border', collapsed ? 'justify-center px-2' : 'px-5')}>
+        <Link to={ROUTES.HOME} className="flex shrink-0 items-center" aria-label="GuestFlow">
+          {collapsed ? (
+            <img src="/logo-icon.png" alt="" className="size-7" />
+          ) : (
+            <img src="/full-logo.png" alt="" className="h-7 w-auto" />
+          )}
+        </Link>
       </div>
+
+      {/* Collapse/expand handle — a hover-highlighted line on the sidebar's edge with
+          a resize-style cursor, instead of a chevron button. The button used to sit next
+          to the logo in the collapsed header, which didn't leave the logo enough room to
+          read clearly at w-19; a full-height edge handle needs no header space at all. */}
+      <button
+        type="button"
+        onClick={() => dispatch(sidebarToggled())}
+        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        className="absolute inset-y-0 -right-px z-10 w-1.5 cursor-col-resize bg-transparent transition-colors hover:bg-primary/40 focus-visible:bg-primary/60 focus-visible:outline-none"
+      />
 
       <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto p-3">
         {items.map(({ flow }) => (

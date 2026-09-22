@@ -28,10 +28,11 @@ export default function InvitesPage() {
     <div className="space-y-6">
       <FlowBanner flowKey="invites" />
 
-      {/* Both columns are the same height on desktop (lg:h-150) and each
-          scrolls its own overflow internally, so a long invite list never
-          stretches the row unevenly against the form — see Aman's "make the
-          height of the cards in one row the same" note. */}
+      {/* Both columns are the same height on desktop (lg:h-150) and each scrolls its own
+          overflow internally, so a long invite list never stretches the row unevenly
+          against the form — see Aman's "make the height of the cards in one row the same"
+          note. The invite list is also height-capped below lg (max-h-125) for the same
+          reason: a long list scrolls in place instead of pushing the page down. */}
       <div className="grid gap-6 lg:h-150 lg:grid-cols-5">
         <Card className="flex flex-col lg:col-span-2 lg:h-full">
           <CardContent className="flex-1 overflow-y-auto pt-6">
@@ -43,7 +44,7 @@ export default function InvitesPage() {
           </CardContent>
         </Card>
 
-        <div className="flex flex-col gap-3 lg:col-span-3 lg:h-full">
+        <div className="flex max-h-125 flex-col gap-3 lg:col-span-3 lg:h-full lg:max-h-none">
           <h2 className="shrink-0 text-base font-semibold">Your invites {invites.length > 0 && `(${invites.length})`}</h2>
           {!hostId ? (
             <Card className="border-dashed">

@@ -15,15 +15,17 @@ import { ROUTES } from '@/constants/routes'
 import { FLOW_LIST } from '@/lib/flowTheme'
 import { cn } from '@/lib/utils'
 
+// Full lockup on spacious headers, icon-only mark once space gets tight (below sm).
 const WORDMARK = (
-  <span className="text-lg font-bold tracking-tight text-foreground">
-    Guest<span className="text-primary">Flow</span>
-  </span>
+  <>
+    <img src="/full-logo.png" alt="GuestFlow" className="hidden h-7 w-auto sm:block" />
+    <img src="/logo-icon.png" alt="GuestFlow" className="h-8 w-auto sm:hidden" />
+  </>
 )
 
-/** Light navbar styled after the reference mood — clean wordmark (no icon badge),
- * dropdown nav, and a pill CTA — every link is real and goes into the working app.
- * Below md: the nav collapses into a Sheet-based hamburger menu. */
+/** Light navbar styled after the reference mood — real logo lockup, dropdown nav,
+ * and a pill CTA — every link is real and goes into the working app. Below md:
+ * the nav collapses into a Sheet-based hamburger menu. */
 export function MarketingNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -99,7 +101,9 @@ export function MarketingNavbar() {
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent side="right" className="w-72">
           <SheetHeader>
-            <SheetTitle asChild>{WORDMARK}</SheetTitle>
+            <SheetTitle asChild>
+              <img src="/full-logo.png" alt="GuestFlow" className="h-7 w-auto" />
+            </SheetTitle>
           </SheetHeader>
           <nav className="flex flex-col gap-1 px-4">
             <Link to={ROUTES.HOME} onClick={() => setMobileOpen(false)} className="rounded-md px-3 py-2.5 text-sm font-medium hover:bg-accent">

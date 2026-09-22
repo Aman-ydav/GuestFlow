@@ -150,7 +150,7 @@ describe('App shell', () => {
     expect(screen.getByRole('button', { name: /confirm invite/i })).toBeInTheDocument()
   })
 
-  it('renders the Front Desk table with real mock data (thousands of seeded visitors, not empty)', async () => {
+  it('renders the Front Desk table with real seeded mock data, paginated (not empty)', async () => {
     renderAt('/app/front-desk')
     expect(await screen.findByRole('heading', { level: 1, name: /front desk/i })).toBeInTheDocument()
     expect(await screen.findByPlaceholderText(/search by name, email or phone/i)).toBeInTheDocument()
@@ -176,27 +176,26 @@ describe('App shell', () => {
   })
 })
 
-describe('Login / Signup', () => {
-  it('renders the login form and signs in with a picked role', async () => {
+describe('Login', () => {
+  it('renders the login form, shows a loading state, and signs in with a picked role', async () => {
     renderAt('/login')
     const user = userEvent.setup()
     expect(await screen.findByRole('heading', { name: /sign in/i })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /create an account/i })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /sign in/i }))
+    expect(await screen.findByRole('button', { name: /signing in/i })).toBeDisabled()
     // default role is Front Desk — should land on the Front Desk dashboard
     expect(await screen.findByRole('heading', { level: 1, name: /front desk/i })).toBeInTheDocument()
-  })
-
-  it('renders the signup form and validates required fields', async () => {
-    renderAt('/signup')
-    const user = userEvent.setup()
-    expect(await screen.findByRole('heading', { name: /create an account/i })).toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: /create account/i }))
-    expect(await screen.findByText(/name is required/i)).toBeInTheDocument()
   })
 
   it('the marketing navbar Login link points at /login, not straight into the app', async () => {
     renderAt('/')
     const loginLinks = screen.getAllByRole('link', { name: /^login$/i })
     expect(loginLinks[0]).toHaveAttribute('href', '/login')
+  })
+
+  it('there is no signup route or page', async () => {
+    renderAt('/signup')
+    expect(await screen.findByRole('heading', { name: /doesn't exist/i })).toBeInTheDocument()
   })
 })

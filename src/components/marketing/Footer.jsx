@@ -8,9 +8,7 @@ export function Footer() {
       <div className="site-container py-10">
         <div className="flex flex-col gap-8 sm:flex-row sm:justify-between">
           <div>
-            <span className="text-lg font-bold tracking-tight text-foreground">
-              Guest<span className="text-primary">Flow</span>
-            </span>
+            <img src="/full-logo.png" alt="GuestFlow" className="h-7 w-auto" />
             <p className="mt-2 max-w-xs text-sm text-muted-foreground">
               A case-study visitor management system — registration, host approvals, pre-approved invites, and a
               front-desk dashboard, built for the MoveInSync frontend intern assignment.

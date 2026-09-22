@@ -42,9 +42,11 @@ export default function HostInboxPage() {
         action={host && <p className="text-sm opacity-90">Acting as {host.name}</p>}
       />
 
-      {/* Same-height columns on desktop, each scrolling its own overflow — see InvitesPage for the same pattern. */}
+      {/* Same-height columns on desktop, each scrolling its own overflow — see InvitesPage for the same pattern.
+          Capped below lg too (max-h-*), not just lg:h-150, so a long list scrolls internally on every
+          screen size instead of pushing the page into one long scroll. */}
       <div className="grid gap-6 lg:h-150 lg:grid-cols-3">
-        <div className="flex flex-col gap-3 lg:col-span-2 lg:h-full">
+        <div className="flex max-h-125 flex-col gap-3 lg:col-span-2 lg:h-full lg:max-h-none">
           <h2 className="shrink-0 text-base font-semibold">
             Pending requests {status === 'idle' && <span className="text-muted-foreground">({pending.length})</span>}
           </h2>
@@ -69,7 +71,7 @@ export default function HostInboxPage() {
           )}
         </div>
 
-        <div className="flex flex-col gap-3 lg:h-full">
+        <div className="flex max-h-125 flex-col gap-3 lg:h-full lg:max-h-none">
           <h2 className="shrink-0 text-base font-semibold">Recent activity</h2>
           <Card className="flex flex-1 flex-col overflow-hidden">
             <CardContent className="flex-1 overflow-y-auto pt-6">

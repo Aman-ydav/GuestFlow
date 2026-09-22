@@ -36,27 +36,24 @@ Whatever the source, every illustration gets recoloured to **1–2 tokens from `
 
 Save to `public/illustrations/<kebab-case-name>.svg` per the naming convention in `04-folder-and-naming-conventions.md`.
 
-### Status update — what actually shipped vs. what's still open
+### Status update — what actually shipped
 
-**Decided (later, superseding the plan above): no icon logo mark in-page at all** — navbar/sidebar/footer use a text-only wordmark ("Guest" + primary-colored "Flow"), see `03-design-system.md` § Logo. A small mark is still useful for the **favicon** (a browser tab needs *something*, and a wordmark doesn't work at 16–32px) — that prompt is below, updated to the current palette.
+**Decided (2026-09-22, superseding both the AI-generation-prompt plan below and the later "text-only wordmark" call): Aman provided real logo/hero artwork directly**, dropped into `public/` — no AI generation needed, the section below is kept only as a historical record of what was planned before that. The real assets:
 
-**Empty states currently use a plain icon + text** (`FiInbox`, `FiUsers`, etc. from `react-icons/fi`) rather than a full illustration — faster to ship, and consistent with the rest of the app's icon language. The unDraw/Storyset sourcing plan above is still the right call **if/when richer empty-state illustrations are added as a polish pass** — treat the table above as ready-to-use, not obsolete.
+| File | Used for |
+|---|---|
+| `public/full-logo.png` | Icon + "GuestFlow" wordmark lockup — desktop marketing navbar, mobile nav Sheet header, expanded sidebar, footer, login page's mobile-only slot |
+| `public/logo-icon.png` | Icon mark only, transparent background — compact marketing navbar (below `sm`), collapsed sidebar, browser favicon, login page's dark left panel |
+| `public/hero.png` | Landing page hero illustration (replaced the hand-coded `HeroIllustration.jsx`, which was deleted along with its now-unused `--gf-*` CSS custom properties in `index.css`) |
+| `public/login-ref.png` | Circular-badge variant of the same illustration, framed with a ring echoing the logo mark — used on the login page's dark left panel instead of the landing hero image |
 
-### AI-generated prompts — logo mark, favicon, and an alternative hero illustration
+See `03-design-system.md` § Logo for the full/icon placement rule.
 
-All three: **flat, solid color only, no gradients, no drop shadows, transparent background ("no background" per Aman's instruction)**, using GuestFlow's actual palette — teal `#1EA6A0`, coral `#F4527A`, ink `#14213A`, white. Save each under `public/` per the naming convention in `04-folder-and-naming-conventions.md`.
+**Empty states currently use a plain icon + text** (`FiInbox`, `FiUsers`, etc. from `react-icons/fi`) rather than a full illustration — faster to ship, and consistent with the rest of the app's icon language. The unDraw/Storyset sourcing plan below is still the right call **if/when richer empty-state illustrations are added as a polish pass** — treat that table as ready-to-use, not obsolete.
 
-**1. `guestflow-mark.svg` → also used as `public/favicon.svg`** (browser tab icon — the only place an icon mark still appears)
-> Prompt: "Minimalist flat vector logo icon, single solid color #1EA6A0, no gradients, no shadows, no text, transparent background: an abstract open door or gate silhouette merging into a simple checkmark or forward-arrow shape, geometric, square 512×512 canvas, bold enough to read clearly as a 16×16px browser favicon."
+### Superseded — original AI-generation prompts (kept for history only, not used)
 
-A basic placeholder favicon (`public/favicon.svg`) already exists (a simple teal rounded-square with a checkmark) — this prompt is for a more polished replacement.
-
-**2. `hero-illustration-alt.svg`** (optional replacement for the current hand-coded `HeroIllustration.jsx` SVG, if a more polished/organic version is wanted)
-> Prompt: "Flat isometric vector illustration, solid colors only — teal #1EA6A0, coral #F4527A, ink #14213A, white — no gradients, no drop shadows, transparent background: three stacked, staggered office floor plates viewed in isometric perspective, each with 2–3 simple minimal human silhouettes (circle head, rounded rectangle body, no facial detail) standing near a small reception desk or door accent in coral, a couple of small parked-car shapes at ground level, clean geometric edges suitable for SVG, square composition, no text, no logos."
-
-If generated, swap it in by replacing the JSX body of `src/components/marketing/HeroIllustration.jsx` with an `<img src="/illustrations/hero-illustration-alt.svg" ... />` (or inline the new SVG directly) — keep the same `className` contract (`h-auto w-full max-w-xs md:max-w-sm`) so the hero grid layout doesn't need touching.
-
-**3. Empty-state illustrations** (only if upgrading from the current icon-only empty states) — use the unDraw/Storyset sourcing table above; no new AI prompts needed since flat single-color stock illustrations already exist for these common concepts.
+The plan had been to AI-generate a logo mark/favicon and an alternative hero illustration (flat, solid-color, no gradients, transparent background, GuestFlow's palette) if nothing better turned up. That never happened — Aman supplied finished artwork instead (above), so these prompts were never run.
 
 ## What I don't need sourced
 

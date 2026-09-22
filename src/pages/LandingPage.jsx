@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { FiArrowRight, FiCheckCircle, FiGitBranch } from 'react-icons/fi'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { HeroIllustration } from '@/components/marketing/HeroIllustration'
 import { ROUTES } from '@/constants/routes'
 import { FLOW_LIST } from '@/lib/flowTheme'
 import { cn } from '@/lib/utils'
@@ -35,8 +34,12 @@ export default function LandingPage() {
               </Button>
             </div>
           </div>
-          <div className="flex min-w-0 items-center justify-center md:justify-end">
-            <HeroIllustration className="h-auto w-full max-w-xs md:max-w-sm" />
+          <div className="flex min-w-0 items-center justify-center">
+            <img
+              src="/hero.png"
+              alt="Isometric illustration of a multi-floor office with visitors checking in and being hosted"
+              className="h-auto w-full max-w-sm md:max-w-md lg:max-w-lg"
+            />
           </div>
         </div>
       </section>
@@ -115,7 +118,7 @@ export default function LandingPage() {
         <div className="site-container relative">
           <h2 className="max-w-md text-2xl font-bold">Ready to see it in action?</h2>
           <p className="mt-2 max-w-sm text-sm text-white/70">
-            No sign-up, no fake demo form — the dashboard is live, right now, with a few thousand mock visitors already in it.
+            No sign-up, no fake demo form — the dashboard is live, right now, with real mock data already in it.
           </p>
           <Button asChild size="lg" className="btn-cta mt-5 bg-brand-lime text-brand-lime-foreground hover:bg-brand-lime/90">
             <Link to={ROUTES.FRONT_DESK}>

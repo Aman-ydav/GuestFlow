@@ -4,6 +4,7 @@ import { FiSearch, FiX } from 'react-icons/fi'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { DatePicker } from '@/components/DatePicker'
 import { STATUS_TOKENS } from '@/lib/statusTokens'
 import { useDebounce } from '@/hooks/useDebounce'
 import { filterChanged, filtersReset, selectFilters } from '@/core/uiSlice'
@@ -41,10 +42,10 @@ export function VisitorFilters() {
           {STATUS_OPTIONS.map((s) => <SelectItem key={s} value={s}>{STATUS_TOKENS[s].label}</SelectItem>)}
         </SelectContent>
       </Select>
-      <Input
-        type="date"
+      <DatePicker
         value={filters.date}
-        onChange={(e) => dispatch(filterChanged({ date: e.target.value }))}
+        onChange={(date) => dispatch(filterChanged({ date }))}
+        placeholder="Any date"
         className="w-40"
       />
       {hasActiveFilters && (
