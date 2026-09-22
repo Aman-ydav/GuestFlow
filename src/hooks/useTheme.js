@@ -1,18 +1,11 @@
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectTheme, themeToggled } from '@/core/uiSlice'
+import { useSelector } from 'react-redux'
+import { selectTheme } from '@/core/uiSlice'
 
 /**
- * Applies the current theme as a `.dark` class on <html> and exposes a toggle.
- * Single source of truth is Redux (ui.theme); this hook is the DOM-syncing side effect.
+ * Light-only by design (see core/uiSlice.js) — this hook exists only so
+ * shadcn's Toaster (sonner.jsx) has a `theme` value to read, matching its
+ * generated API. There is no toggle anywhere in the UI.
  */
 export function useTheme() {
-  const theme = useSelector(selectTheme)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-  }, [theme])
-
-  return { theme, toggleTheme: () => dispatch(themeToggled()) }
+  return { theme: useSelector(selectTheme) }
 }

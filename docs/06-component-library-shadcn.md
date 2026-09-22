@@ -56,8 +56,12 @@ Built from shadcn's `Command` + `Popover` + `Badge`, not a new dependency.
 
 shadcn's generated components import specific `lucide-react` icons directly (e.g. `Select`'s chevron, `Dialog`/`Sheet`'s close `X`, `Checkbox`'s check, `Calendar`'s arrows). Since `react-icons` was chosen app-wide, do a one-time pass after `add --all`: find every `from "lucide-react"` import inside `components/ui/*` and swap it for the equivalent `react-icons/fi` (Feather-style, matches lucide's outline look most closely) icon, keeping the same size/className props. This is a deliberate, documented exception to "don't edit generated component internals" — log each file touched in a short list here once done, so a future `npx shadcn add` re-sync knows what to redo.
 
+## Select — reskinned to match a specific reference (deliberate exception)
+
+`components/ui/select.jsx` was reskinned to match a reference screenshot (iOS-style): the trigger and the open option list render as one seamless rounded card with a colored divider between them (`position="popper"`, `sideOffset=0`, trigger's bottom corners square off on open, content's top corners square off to meet it), bigger item padding, `rounded-lg` item highlight instead of `rounded-sm`. Same precedent as the icon swap — a documented, intentional edit to generated component internals, not a style hack layered on top.
+
 ## Rules
 
-- Aside from the icon swap above, never edit a generated `components/ui/*` file's *logic* — only its default class names, to keep future `shadcn add` updates mergeable. Visual overrides happen via the CSS variables, not by hand-editing component internals.
+- Aside from the icon swap and the `Select` reskin above, never edit a generated `components/ui/*` file's *logic* — only its default class names, to keep future `shadcn add` updates mergeable. Visual overrides happen via the CSS variables, not by hand-editing component internals.
 - One icon set (`react-icons`) app-wide, sized 16–20px inside buttons/inputs, one subset only (e.g. stick to `fi`) — see `03-design-system.md`.
 - Every shadcn component used gets checked in dark mode before a screen is marked done.

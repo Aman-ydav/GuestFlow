@@ -4,15 +4,14 @@
 /* ============================================================
    GuestFlow design tokens — single source of truth.
    No gradients anywhere. All colors are solid HSL triplets.
-   See ../docs/03-design-system.md for the full rationale.
+   Light theme only, by design (Aman's explicit call) — no
+   .dark variant, no toggle. See ../docs/03-design-system.md.
    ============================================================ */
-
-@custom-variant dark (&:is(.dark *));
 
 :root {
   --radius: 0.5rem;
 
-  /* shadcn semantic tokens — light */
+  /* shadcn semantic tokens */
   --background: 0 0% 100%;
   --foreground: 221 39% 11%;
   --card: 0 0% 100%;
@@ -35,13 +34,16 @@
 
   /* GuestFlow brand tokens — used deliberately, not everywhere (see design-system.md).
      Tuned to a clear turquoise (H180), not a green-leaning teal (H173 reads too green
-     next to the reference mood — see DECISIONS.md). */
+     next to the reference mood — see DECISIONS.md). One flow = one color, reused
+     identically on the landing page's flow cards AND each dashboard page's banner
+     (see lib/flowTheme.js) so the two halves of the site read as one system. */
   --brand-teal: 180 72% 38%;
   --brand-coral: 350 89% 60%;
   --brand-coral-foreground: 0 0% 100%;
   --brand-lime: 82 70% 50%;
   --brand-lime-foreground: 221 39% 11%;
   --brand-ink: 221 39% 11%;
+  --brand-ink-foreground: 0 0% 100%;
 
   /* semantic status colors (used by lib/statusTokens.js, not applied raw) */
   --success: 142 71% 40%;
@@ -62,42 +64,6 @@
   --gf-card-mid: #E8EAF0;
   --gf-card-dark: #D2D5E0;
   --gf-line: #14213A;
-}
-
-.dark {
-  --background: 224 20% 7%;
-  --foreground: 210 20% 96%;
-  --card: 222 18% 10%;
-  --card-foreground: 210 20% 96%;
-  --popover: 222 18% 10%;
-  --popover-foreground: 210 20% 96%;
-  --primary: 178 65% 46%;
-  --primary-foreground: 224 20% 7%;
-  --secondary: 222 14% 16%;
-  --secondary-foreground: 210 20% 96%;
-  --muted: 222 14% 16%;
-  --muted-foreground: 240 5% 65%;
-  --accent: 222 14% 16%;
-  --accent-foreground: 210 20% 96%;
-  --destructive: 0 74% 58%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 222 12% 20%;
-  --input: 222 12% 20%;
-  --ring: 178 65% 46%;
-
-  --brand-teal: 178 65% 46%;
-  --brand-coral: 350 80% 65%;
-  --brand-coral-foreground: 224 20% 7%;
-  --brand-lime: 82 60% 55%;
-  --brand-lime-foreground: 224 20% 7%;
-  --brand-ink: 210 20% 96%;
-
-  --success: 142 55% 50%;
-  --success-foreground: 224 20% 7%;
-  --warning: 38 85% 55%;
-  --warning-foreground: 224 20% 7%;
-  --info: 217 85% 65%;
-  --info-foreground: 224 20% 7%;
 }
 
 /* Expose every token above as a Tailwind color utility: bg-primary, text-brand-lime, border-border, etc. */
@@ -128,6 +94,7 @@
   --color-brand-lime: hsl(var(--brand-lime));
   --color-brand-lime-foreground: hsl(var(--brand-lime-foreground));
   --color-brand-ink: hsl(var(--brand-ink));
+  --color-brand-ink-foreground: hsl(var(--brand-ink-foreground));
 
   --color-success: hsl(var(--success));
   --color-success-foreground: hsl(var(--success-foreground));
@@ -163,5 +130,11 @@
   /* Primary CTAs are pill-shaped — the one deliberate echo of the reference mood. Everything else is rounded-lg. */
   .btn-cta {
     @apply rounded-full;
+  }
+  /* Full-bleed section container: fills normal/laptop screens edge to edge, caps only
+     on very wide monitors so text doesn't stretch unreadably. Used everywhere instead
+     of the earlier max-w-6xl (Aman: "use full width"). */
+  .site-container {
+    @apply mx-auto w-full max-w-[1600px] px-6 md:px-10 lg:px-16;
   }
 }

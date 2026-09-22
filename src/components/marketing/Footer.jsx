@@ -4,15 +4,12 @@ import { ROUTES } from '@/constants/routes'
 export function Footer() {
   return (
     <footer className="border-t border-border bg-background">
-      <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
+      <div className="site-container py-10">
         <div className="flex flex-col gap-8 sm:flex-row sm:justify-between">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="flex size-7 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">
-                G
-              </span>
-              <span className="text-base font-semibold">GuestFlow</span>
-            </div>
+            <span className="text-lg font-bold tracking-tight text-foreground">
+              Guest<span className="text-primary">Flow</span>
+            </span>
             <p className="mt-2 max-w-xs text-sm text-muted-foreground">
               A case-study visitor management system — registration, host approvals, pre-approved invites, and a
               front-desk dashboard, built for the MoveInSync frontend intern assignment.
@@ -38,6 +35,16 @@ export function Footer() {
         </div>
         <p className="mt-8 border-t border-border pt-6 text-xs text-muted-foreground">
           © {new Date().getFullYear()} GuestFlow. Built as a case-study submission — not a commercial product.
+        </p>
+      </div>
+
+      {/* Big wordmark flourish */}
+      <div className="site-container overflow-hidden pb-6">
+        <p
+          aria-hidden="true"
+          className="-mb-3 -ml-1 truncate text-[16vw] leading-none font-black tracking-tighter text-foreground/5 select-none sm:text-[12vw] lg:text-[9rem]"
+        >
+          GuestFlow
         </p>
       </div>
     </footer>

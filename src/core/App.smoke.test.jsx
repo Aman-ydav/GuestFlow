@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router-dom'
 import { routes } from './routes'
@@ -63,12 +63,11 @@ describe('App shell', () => {
     expect(await screen.findByText(/full name is required/i)).toBeInTheDocument()
   })
 
-  it('toggles theme and applies the dark class to <html>', async () => {
+  it('has no theme toggle — light-only by design', async () => {
     renderAt('/app')
-    const user = userEvent.setup()
-    const toggle = await screen.findByRole('button', { name: /switch to dark theme/i })
-    await user.click(toggle)
-    await waitFor(() => expect(document.documentElement.classList.contains('dark')).toBe(true))
+    await screen.findByRole('heading', { level: 1, name: /front desk/i })
+    expect(screen.queryByLabelText(/switch to dark theme/i)).not.toBeInTheDocument()
+    expect(document.documentElement.classList.contains('dark')).toBe(false)
   })
 
   it('accepts an uploaded photo as a camera fallback', async () => {
@@ -88,5 +87,28 @@ describe('App shell', () => {
   it('shows a 404 page for an unknown route', async () => {
     renderAt('/nonexistent-route')
     expect(await screen.findByRole('heading', { name: /page not found/i })).toBeInTheDocument()
+  })
+
+  it('collapses and expands the sidebar, hiding visible nav labels while collapsed', async () => {
+    renderAt('/app')
+    const user = userEvent.setup()
+    await screen.findByRole('heading', { level: 1, name: /front desk/i })
+    const nav = screen.getByRole('navigation')
+    // visible label text node (distinct from the icon-only link's aria-label, which
+    // stays present in both states on purpose — collapsed nav must stay screen-reader labelled)
+    expect(within(nav).getByText('Front Desk Dashboard')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /collapse sidebar/i }))
+    expect(within(nav).queryByText('Front Desk Dashboard')).not.toBeInTheDocument()
+    expect(within(nav).getByRole('link', { name: 'Front Desk Dashboard' })).toBeInTheDocument() // aria-label still there
+
+    await user.click(screen.getByRole('button', { name: /expand sidebar/i }))
+    expect(within(nav).getByText('Front Desk Dashboard')).toBeInTheDocument()
+  })
+
+  it('shows a flow-colored banner on a not-yet-built page', async () => {
+    renderAt('/app/inbox')
+    expect(await screen.findByRole('heading', { level: 2, name: /host approvals/i })).toBeInTheDocument()
+    expect(screen.getByText(/coming next/i)).toBeInTheDocument()
   })
 })

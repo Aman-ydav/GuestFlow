@@ -2,6 +2,23 @@
 
 **Mood reference:** the Traction Guest screenshots you shared — solid flat colour blocks (no gradients), bold geometric/isometric illustration accents, pill-shaped CTAs, generous whitespace, dense small-type data tables. GuestFlow takes the *mood*, not the brand — our own palette below, our own name, no copied logos/marks.
 
+## Layout width
+
+**Full-bleed, not boxed.** Every section (navbar, footer, landing sections, the dashboard's topbar/main) uses the `.site-container` utility (`index.css`) — fills normal/laptop screens edge to edge with responsive side padding, capped at `1600px` only so text doesn't stretch unreadably on ultra-wide monitors. This replaced an earlier `max-w-6xl` centered-box layout per Aman's "use full width" instruction.
+
+## One color per flow — the system that ties the whole app together
+
+`lib/flowTheme.js` defines `FLOWS = { registration, approvals, invites, frontDesk, admin }`, each with a title, icon, description, and a solid Tailwind color pair (`tone`). This single object is the **only** place a flow's color is chosen — imported by:
+- The landing page's flow-card grid (`pages/LandingPage.jsx`)
+- Every dashboard page's `<FlowBanner flowKey="..." />` header (`components/FlowBanner.jsx`)
+- The sidebar's active-nav-item background (`components/layout/Sidebar.jsx`)
+
+Colors: registration = coral, approvals = lime, invites = primary/teal, front desk = ink, admin = zinc. Never hardcode one of these elsewhere — add a new flow to `FLOWS` instead.
+
+## Logo — wordmark only, no icon badge
+
+**Decided:** no square "G" icon mark anywhere (navbar, sidebar, footer) — just the wordmark, "Guest" in `text-foreground`, "Flow" in `text-primary`, `font-bold tracking-tight`. Matches the reference's own clean logotype treatment. The one place an icon mark still exists is `public/logo/guestflow-mark.svg` / the favicon (see `07-image-assets-and-prompts.md`), which is a separate, smaller use case (browser tab, not in-page branding).
+
 ## Site structure: marketing (`/`) vs product (`/app/*`)
 
 `/` is the public landing page (navbar, hero, feature/flow cards, CTA banner) styled closely on the reference mood — see `MarketingNavbar`/`MarketingLayout`/`LandingPage`. The actual product (kiosk, host inbox, invites, front desk, admin) lives under `/app/*` using the dashboard shell (`AppShell`/`Sidebar`/`Topbar`). Every CTA on the landing page links to a real, working `/app/...` route — no fake "book a demo" forms or fabricated testimonials/client logos; where the reference has a testimonial, GuestFlow has an honest "About this project" note instead.
@@ -80,12 +97,9 @@ Default Tailwind body text is 16px; GuestFlow is a data-dense enterprise tool (s
 
 **Decided: sourced from [unDraw](https://undraw.co) (primary) and [Storyset](https://storyset.com) (secondary)**, recoloured to the palette above — not AI-generated (the one exception is the logo mark, which no stock library has). Full sourcing plan, license notes, and the list of needed illustrations: `07-image-assets-and-prompts.md`. Used only for empty states, the kiosk landing screen, and error pages — never as decorative filler.
 
-## Dark / light theme
+## Theme: light-only, by design
 
-- Strategy: `class` on `<html>` (`.dark`), not `prefers-color-scheme` alone — user-togglable, defaults to system preference on first load.
-- Toggle lives in `uiSlice` (`theme: 'light' | 'dark'`), persisted to `localStorage`, applied via a `useEffect` in the app shell that sets/removes the `dark` class.
-- **Every screen must be checked in both themes before it's marked done** — this is a checklist item in `RULES.md`, not optional polish.
-- Status badge colors, brand tokens, and illustrations all need a dark-mode value — see the tables above.
+**Decided (superseding an earlier draft of this doc): no dark mode, no toggle, ever.** Aman's explicit call after seeing the build — "keep the white theme default and do not make changes according to theme." `index.css` has no `.dark` block at all (deleted, not just unused); `ui.theme` in Redux is a fixed `'light'` field kept only so `sonner`'s `Toaster` has a `theme` prop to read (see `hooks/useTheme.js`) — nothing in the UI can change it. Don't re-add a toggle without this being revisited explicitly.
 
 ## Feedback rules (User Experience + Error Handling criteria)
 

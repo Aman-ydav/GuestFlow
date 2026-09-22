@@ -10,7 +10,10 @@ The single enforcement checklist. Every other doc explains *why*; this page is t
 
 ## Every screen, before it's marked done
 
-- [ ] Checked in **both** light and dark theme.
+- [ ] Light theme only — there is no dark mode and no toggle (Aman's explicit call, see `DECISIONS.md`). Don't add theme-conditional styling.
+- [ ] Uses `.site-container` for section width, not a one-off `max-w-*`.
+- [ ] If it's a dashboard page for one of the 4 flows, it starts with `<FlowBanner flowKey="..." />` using that flow's color from `lib/flowTheme.js` — not a locally invented color.
+- [ ] No "G" icon badge next to the GuestFlow wordmark — text only (`Guest` + `Flow` in primary).
 - [ ] Every action (submit, approve, reject, check-in, check-out, cancel) gives visible feedback — toast, inline error, or status change. No silent no-ops.
 - [ ] Every form validates before submit; errors are human-readable, not raw error codes.
 - [ ] Destructive actions confirm first (`AlertDialog`).
