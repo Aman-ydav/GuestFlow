@@ -1,13 +1,13 @@
 "use client"
 
 import { FiCheckCircle, FiInfo, FiLoader, FiXOctagon, FiAlertTriangle } from "react-icons/fi"
-import { useTheme } from "next-themes"
+import { useTheme } from "@/hooks/useTheme"
 import { Toaster as Sonner } from "sonner";
 
 const Toaster = ({
   ...props
 }) => {
-  const { theme = "system" } = useTheme()
+  const { theme } = useTheme()
 
   return (
     <Sonner
