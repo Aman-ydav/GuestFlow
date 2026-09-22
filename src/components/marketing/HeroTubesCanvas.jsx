@@ -53,9 +53,10 @@ export function HeroTubesCanvas({ className }) {
         appRef.current = TubesCursor(canvasRef.current, {
           tubes: {
             colors: sample(TUBE_COLORS, 3),
-            // Toned way down from the reference's intensity: 200 — that read as
-            // a much stronger glow than a subtle text-readable background needs.
-            lights: { intensity: 50, colors: sample(LIGHT_COLORS, 4) },
+            // Toned way down from the reference's intensity: 200 (too strong a
+            // glow behind readable text), then nudged back up a little from an
+            // initial 50 — Aman: "increase a little bit from the current."
+            lights: { intensity: 90, colors: sample(LIGHT_COLORS, 4) },
           },
         })
       } catch (error) {

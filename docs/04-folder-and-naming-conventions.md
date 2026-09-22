@@ -31,7 +31,7 @@ GuestFlow/
 │   │   │   └── index.js         public exports only
 │   │   ├── approval/            Host approve/reject flow
 │   │   ├── invites/             Pre-approval / invite flow
-│   │   ├── front-desk/          Dashboard + guest details
+│   │   ├── front-desk/          Dashboard + guest details + VisitorBadgeDialog (QR badge, generated after approval)
 │   │   └── admin/                Config (limits, offices)
 │   ├── components/
 │   │   ├── ui/                  shadcn components (generated + themed here)

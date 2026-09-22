@@ -135,6 +135,21 @@ describe('App shell', () => {
     expect(within(nav).getByText('Front Desk Dashboard')).toBeInTheDocument()
   })
 
+  it('sidebar nav links get a real, flat class list — not a NavLink className function stringified by Slot', async () => {
+    // Regression test: wrapping a NavLink (whose `className` prop is a
+    // ({isActive}) => string function) in <TooltipTrigger asChild> made Radix
+    // Slot's prop-merge coerce that function to a string via `+`, putting its
+    // literal source code into the class attribute instead of real Tailwind
+    // classes — `flex` never actually applied, so the row was never really a
+    // flex row (this is what broke "icon and label on one line" in the sidebar).
+    // Caught originally by rendering it and reading the real outerHTML.
+    renderAt('/app')
+    const nav = screen.getByRole('navigation')
+    const activeLink = await within(nav).findByRole('link', { name: 'Front Desk Dashboard' })
+    expect(activeLink.className).not.toMatch(/=>|isActive|cn\(/)
+    expect(activeLink.className.split(/\s+/)).toEqual(expect.arrayContaining(['flex', 'items-center']))
+  })
+
   it('shows the flow-colored Host Approvals banner, and a "pick a host" state before one is chosen', async () => {
     renderAt('/app/inbox')
     expect(await screen.findByRole('heading', { level: 2, name: /host approvals/i })).toBeInTheDocument()

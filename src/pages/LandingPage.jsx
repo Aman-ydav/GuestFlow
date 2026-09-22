@@ -24,7 +24,7 @@ export default function LandingPage() {
             readable without fighting the "no gradients" rule. */}
         <div className="absolute inset-0 bg-black/35" />
         <div className="site-container relative z-10 grid items-center gap-10 py-16 md:grid-cols-2 md:gap-16 md:py-24">
-          <div className="min-w-0 max-w-xl">
+          <div className="min-w-0 max-w-xl md:self-start">
             <h1 className="font-display text-6xl leading-[0.95] font-extrabold tracking-tight sm:text-7xl lg:text-8xl">
               {/* <br/> forces the line break; the explicit {' '} keeps a real space
                   character in the text content either side of it — plain sibling

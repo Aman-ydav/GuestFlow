@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
-import { FiCheckCircle, FiCircle, FiLoader, FiLogOut, FiChevronDown } from 'react-icons/fi'
+import { FiCheckCircle, FiCircle, FiLoader, FiLogOut, FiChevronDown, FiSmartphone } from 'react-icons/fi'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,6 +14,12 @@ import { visitorSelectors, transitionVisitor, selectIsVisitorMutating } from '@/
 import { hostSelectors } from '@/features/approval/hostsSlice'
 import { selectOverstayMinutes } from '@/features/admin/configSlice'
 import { listAuditEvents } from '@/services/visitorService'
+import { VisitorBadgeDialog } from './VisitorBadgeDialog'
+
+// A badge only exists once the visitor is past the manual approval step (see
+// assignment/problem-statement.md: "a visitor badge ... is generated after
+// approval") — pending/rejected visitors never had one issued.
+const HAS_BADGE_STATUSES = ['approved', 'checked-in', 'checked-out']
 
 export function GuestDetailsSheet({ visitorId, open, onOpenChange }) {
   return (
@@ -36,6 +42,7 @@ function GuestDetailsBody({ visitorId }) {
   const [events, setEvents] = useState([])
   const [note, setNote] = useState('')
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const [badgeOpen, setBadgeOpen] = useState(false)
 
   useEffect(() => {
     listAuditEvents(visitorId).then(setEvents)
@@ -78,6 +85,12 @@ function GuestDetailsBody({ visitorId }) {
             </div>
           </div>
         </div>
+
+        {HAS_BADGE_STATUSES.includes(visitor.status) && (
+          <Button type="button" variant="outline" size="sm" className="w-full" onClick={() => setBadgeOpen(true)}>
+            <FiSmartphone className="size-3.5" /> View Visitor Badge
+          </Button>
+        )}
 
         <div className="space-y-2.5">
           <div className="flex items-center gap-2.5 text-sm">
@@ -147,6 +160,8 @@ function GuestDetailsBody({ visitorId }) {
           {visitor.status === 'checked-in' ? 'Check-Out' : 'Check-Out (not checked in)'}
         </Button>
       </div>
+
+      <VisitorBadgeDialog visitor={visitor} host={host} open={badgeOpen} onOpenChange={setBadgeOpen} />
     </>
   )
 }

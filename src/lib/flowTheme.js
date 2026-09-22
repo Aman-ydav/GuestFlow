@@ -37,13 +37,15 @@ export const FLOWS = {
     title: 'Front Desk Dashboard',
     desc: 'Live search, guest details, check-in/out, overstays.',
     icon: FiMonitor,
-    // Ink is near-black — great contrast on the light dashboard theme, but it
-    // would nearly disappear against the dark theme's own near-black
-    // background. Inverted specifically for this one flow in dark mode
-    // (Aman: "in black theme use the white bg, vice versa in light theme") —
-    // the other flows (coral/lime/teal) stay bright enough in dark mode as-is.
-    tone: 'bg-brand-ink text-brand-ink-foreground dark:bg-white dark:text-brand-ink',
-    soft: 'bg-brand-ink/10 text-brand-ink dark:bg-white/10 dark:text-white',
+    // No dark: prefix needed — --brand-ink/--brand-ink-foreground are already
+    // redefined inside .dark{} in index.css (ink flips to near-white,
+    // ink-foreground flips to near-black), so this one pair of classes already
+    // renders correctly in both themes. An earlier fix added `dark:bg-white
+    // dark:text-brand-ink` on top of that, which put dark mode's near-white
+    // `--brand-ink` value as TEXT on top of a literal bg-white — near-invisible.
+    // Caught from a screenshot; don't re-add dark: overrides here.
+    tone: 'bg-brand-ink text-brand-ink-foreground',
+    soft: 'bg-brand-ink/10 text-brand-ink',
   },
   admin: {
     to: ROUTES.ADMIN,

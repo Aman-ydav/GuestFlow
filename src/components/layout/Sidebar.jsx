@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { ROUTES } from '@/constants/routes'
 import { ROLES } from '@/constants/roles'
@@ -18,6 +18,7 @@ const NAV_ITEMS = [
 export function Sidebar({ role }) {
   const dispatch = useDispatch()
   const collapsed = useSelector(selectSidebarCollapsed)
+  const { pathname } = useLocation()
   const items = NAV_ITEMS.filter((item) => item.roles.includes(role))
 
   return (
@@ -59,31 +60,39 @@ export function Sidebar({ role }) {
         </Tooltip>
 
         <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto p-3">
-          {items.map(({ flow }) => (
-            <Tooltip key={flow.to}>
-              <TooltipTrigger asChild>
-                <NavLink
-                  to={flow.to}
-                  end={flow.to === ROUTES.FRONT_DESK}
-                  aria-label={collapsed ? flow.title : undefined}
-                  className={({ isActive }) =>
-                    cn(
-                      'flex flex-nowrap items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
-                      collapsed && 'justify-center px-0',
-                      isActive
-                        ? cn(flow.tone, 'shadow-sm')
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                    )
-                  }
-                >
-                  <flow.icon className="size-4 shrink-0" />
-                  {!collapsed && <span className="truncate">{flow.title}</span>}
-                </NavLink>
-              </TooltipTrigger>
-              {/* Only when collapsed — expanded nav already shows the label as text. */}
-              {collapsed && <TooltipContent side="right">{flow.title}</TooltipContent>}
-            </Tooltip>
-          ))}
+          {items.map(({ flow }) => {
+            const end = flow.to === ROUTES.FRONT_DESK
+            const isActive = end ? pathname === flow.to : pathname.startsWith(flow.to)
+            // A plain string, not a function — NavLink normally accepts a
+            // ({isActive}) => string function for className, but Radix Slot
+            // (from TooltipTrigger asChild below) merges className by string
+            // concatenation, which silently stringifies a function prop via JS's
+            // usual `+` coercion. That put the function's literal *source code*
+            // into the class attribute instead of the computed classes — `flex`
+            // never actually applied, so this was never really a flex row. Caught
+            // by rendering it in a test and reading the real outerHTML, not by
+            // guessing from the JSX. Computing isActive here avoids the function
+            // entirely.
+            const linkClassName = cn(
+              'flex flex-nowrap items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
+              collapsed && 'justify-center px-0',
+              isActive
+                ? cn(flow.tone, 'shadow-sm')
+                : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+            )
+            return (
+              <Tooltip key={flow.to}>
+                <TooltipTrigger asChild>
+                  <NavLink to={flow.to} end={end} aria-label={collapsed ? flow.title : undefined} className={linkClassName}>
+                    <flow.icon className="size-4 shrink-0" />
+                    {!collapsed && <span className="truncate">{flow.title}</span>}
+                  </NavLink>
+                </TooltipTrigger>
+                {/* Only when collapsed — expanded nav already shows the label as text. */}
+                {collapsed && <TooltipContent side="right">{flow.title}</TooltipContent>}
+              </Tooltip>
+            )
+          })}
         </nav>
       </aside>
     </TooltipProvider>
