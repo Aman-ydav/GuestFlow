@@ -76,11 +76,26 @@ describe('App shell', () => {
     expect(await screen.findByText(/full name is required/i)).toBeInTheDocument()
   })
 
-  it('has no theme toggle — light-only by design', async () => {
+  it('the theme toggle applies dark to the app shell only, never to <html> or the marketing site', async () => {
     renderAt('/app')
+    const user = userEvent.setup()
     await screen.findByRole('heading', { level: 1, name: /front desk/i })
-    expect(screen.queryByLabelText(/switch to dark theme/i)).not.toBeInTheDocument()
     expect(document.documentElement.classList.contains('dark')).toBe(false)
+    expect(document.querySelector('.dark')).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: /switch to dark theme/i }))
+    // <html> is never touched (SPA — would otherwise leak into the marketing route)
+    expect(document.documentElement.classList.contains('dark')).toBe(false)
+    // the app shell's own root carries it instead
+    expect(document.querySelector('.dark')).toBeInTheDocument()
+  })
+
+  it('the marketing site never shows a theme toggle and always renders light', async () => {
+    renderAt('/')
+    await screen.findByRole('heading', { level: 1, name: /go beyond the/i })
+    expect(screen.queryByLabelText(/switch to dark theme/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/switch to light theme/i)).not.toBeInTheDocument()
+    expect(document.querySelector('.dark')).not.toBeInTheDocument()
   })
 
   it('accepts an uploaded photo as a camera fallback', async () => {

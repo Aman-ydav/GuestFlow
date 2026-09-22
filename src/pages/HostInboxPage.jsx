@@ -42,9 +42,10 @@ export default function HostInboxPage() {
         action={host && <p className="text-sm opacity-90">Acting as {host.name}</p>}
       />
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="space-y-3 lg:col-span-2">
-          <h2 className="text-base font-semibold">
+      {/* Same-height columns on desktop, each scrolling its own overflow — see InvitesPage for the same pattern. */}
+      <div className="grid gap-6 lg:h-150 lg:grid-cols-3">
+        <div className="flex flex-col gap-3 lg:col-span-2 lg:h-full">
+          <h2 className="shrink-0 text-base font-semibold">
             Pending requests {status === 'idle' && <span className="text-muted-foreground">({pending.length})</span>}
           </h2>
           {!hostId ? (
@@ -62,14 +63,16 @@ export default function HostInboxPage() {
               </CardContent>
             </Card>
           ) : (
-            pending.map((visitor) => <PendingVisitorCard key={visitor.id} visitor={visitor} />)
+            <div className="flex-1 space-y-3 overflow-y-auto pr-1 lg:pb-1">
+              {pending.map((visitor) => <PendingVisitorCard key={visitor.id} visitor={visitor} />)}
+            </div>
           )}
         </div>
 
-        <div>
-          <h2 className="text-base font-semibold">Recent activity</h2>
-          <Card className="mt-3">
-            <CardContent className="pt-6">
+        <div className="flex flex-col gap-3 lg:h-full">
+          <h2 className="shrink-0 text-base font-semibold">Recent activity</h2>
+          <Card className="flex flex-1 flex-col overflow-hidden">
+            <CardContent className="flex-1 overflow-y-auto pt-6">
               {recentActivity.length === 0 ? (
                 <p className="text-sm text-muted-foreground">No activity yet.</p>
               ) : (

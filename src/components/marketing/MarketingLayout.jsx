@@ -11,7 +11,8 @@ export function MarketingLayout() {
         <Outlet />
       </main>
       <Footer />
-      <Toaster position="top-right" />
+      {/* explicit "light" — never follows ui.theme, the marketing site is never dark (see AppShell) */}
+      <Toaster theme="light" position="top-right" />
     </div>
   )
 }

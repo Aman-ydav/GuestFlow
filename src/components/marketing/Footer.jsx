@@ -34,9 +34,6 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <p className="mt-8 border-t border-border pt-6 text-xs text-muted-foreground">
-          © {new Date().getFullYear()} GuestFlow. Built as a case-study submission — not a commercial product.
-        </p>
       </div>
 
       {/* Big wordmark flourish — genuinely fills the full container width via FitText

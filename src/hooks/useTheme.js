@@ -1,11 +1,17 @@
-import { useSelector } from 'react-redux'
-import { selectTheme } from '@/core/uiSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectTheme, themeToggled } from '@/core/uiSlice'
 
 /**
- * Light-only by design (see core/uiSlice.js) — this hook exists only so
- * shadcn's Toaster (sonner.jsx) has a `theme` value to read, matching its
- * generated API. There is no toggle anywhere in the UI.
+ * Theme applies ONLY inside the /app/* dashboard. AppShell reads `theme` and
+ * puts the `dark` class on its OWN root div (not <html>) — since this is an
+ * SPA, touching <html> would leak dark mode into the marketing site on
+ * navigation. The marketing site is never wrapped in that class, so it always
+ * renders light regardless of this value — no separate "force light" code
+ * needed, it's just never inside the `.dark` ancestor Tailwind's dark:
+ * variant looks for (@custom-variant dark in index.css).
  */
 export function useTheme() {
-  return { theme: useSelector(selectTheme) }
+  const theme = useSelector(selectTheme)
+  const dispatch = useDispatch()
+  return { theme, toggleTheme: () => dispatch(themeToggled()) }
 }

@@ -1,8 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const THEME_KEY = 'guestflow:theme'
 const ROLE_KEY = 'guestflow:role'
 const SIDEBAR_KEY = 'guestflow:sidebarCollapsed'
 const HOST_KEY = 'guestflow:currentHostId'
+
+function getPreferredTheme() {
+  try {
+    const stored = localStorage.getItem(THEME_KEY)
+    if (stored === 'light' || stored === 'dark') return stored
+  } catch {
+    // localStorage unavailable (private mode) — fall through to system preference
+  }
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
 
 function getPreferredRole() {
   try {
@@ -31,10 +42,10 @@ function getPreferredHostId() {
 }
 
 const initialState = {
-  // Light-only by design (Aman's explicit call) — no theme toggle, no system-preference
-  // detection. Kept as a field (rather than deleted outright) only so a future dark
-  // mode doesn't require a state-shape migration; nothing in the UI can change it today.
-  theme: 'light',
+  // Applies ONLY inside the /app/* dashboard (AppShell adds/removes the `dark`
+  // class on its own root, never on <html>) — the marketing site at `/` always
+  // renders light regardless of this value. See docs/03-design-system.md.
+  theme: getPreferredTheme(),
   role: getPreferredRole(),
   // Which mock host you're "logged in as" for the host/admin roles — demo-only concept,
   // no real auth. Host Inbox and Invites scope to this so they read as personal, not a
@@ -49,6 +60,14 @@ const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
+    themeToggled(state) {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark'
+      try {
+        localStorage.setItem(THEME_KEY, state.theme)
+      } catch {
+        // ignore write failure
+      }
+    },
     roleChanged(state, action) {
       state.role = action.payload
       state.selectedVisitorId = null
@@ -87,6 +106,7 @@ const uiSlice = createSlice({
 })
 
 export const {
+  themeToggled,
   roleChanged,
   currentHostChanged,
   sidebarToggled,

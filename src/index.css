@@ -4,16 +4,16 @@
 /* ============================================================
    GuestFlow design tokens — single source of truth.
    No gradients anywhere. All colors are solid HSL triplets.
-   Light theme only, by design (Aman's explicit call) — no
-   .dark variant, no toggle. See ../docs/03-design-system.md.
+
+   Theme: dark/light toggle exists ONLY inside the /app/* dashboard.
+   AppShell puts the `dark` class on its own root div, never on <html> —
+   this is an SPA, so touching <html> would leak dark mode into the
+   marketing site on client-side navigation. The marketing site (`/`) is
+   a sibling route tree, never nested inside that div, so it can never
+   match the `dark:` variant below and always renders light. See
+   hooks/useTheme.js and ../docs/03-design-system.md.
    ============================================================ */
 
-/* Ties every `dark:` utility (including the ones baked into shadcn's generated
-   components/ui/* files, which we don't hand-edit) to a `.dark` ancestor class
-   that is NEVER applied anywhere in this app. Without this line, Tailwind v4
-   falls back to `prefers-color-scheme: dark` — meaning a visitor with system
-   dark mode on would see uncontrolled dark styling with no toggle to undo it.
-   This line is what makes every `dark:` class permanently inert. Do not remove it. */
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -72,6 +72,43 @@
   --gf-card-mid: #E8EAF0;
   --gf-card-dark: #D2D5E0;
   --gf-line: #14213A;
+}
+
+.dark {
+  --background: 224 20% 7%;
+  --foreground: 210 20% 96%;
+  --card: 222 18% 10%;
+  --card-foreground: 210 20% 96%;
+  --popover: 222 18% 10%;
+  --popover-foreground: 210 20% 96%;
+  --primary: 178 65% 46%;
+  --primary-foreground: 224 20% 7%;
+  --secondary: 222 14% 16%;
+  --secondary-foreground: 210 20% 96%;
+  --muted: 222 14% 16%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 222 14% 16%;
+  --accent-foreground: 210 20% 96%;
+  --destructive: 0 74% 58%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 222 12% 20%;
+  --input: 222 12% 20%;
+  --ring: 178 65% 46%;
+
+  --brand-teal: 178 65% 46%;
+  --brand-coral: 350 80% 65%;
+  --brand-coral-foreground: 224 20% 7%;
+  --brand-lime: 82 60% 55%;
+  --brand-lime-foreground: 224 20% 7%;
+  --brand-ink: 210 20% 96%;
+  --brand-ink-foreground: 224 20% 7%;
+
+  --success: 142 55% 50%;
+  --success-foreground: 224 20% 7%;
+  --warning: 38 85% 55%;
+  --warning-foreground: 224 20% 7%;
+  --info: 217 85% 65%;
+  --info-foreground: 224 20% 7%;
 }
 
 /* Expose every token above as a Tailwind color utility: bg-primary, text-brand-lime, border-border, etc. */

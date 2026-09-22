@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { RoleSwitcher } from './RoleSwitcher'
 import { MobileNav } from './MobileNav'
+import { ThemeToggle } from './ThemeToggle'
 import { selectRole } from '@/core/uiSlice'
 
 export function Topbar({ title }) {
@@ -12,7 +13,10 @@ export function Topbar({ title }) {
         <MobileNav role={role} />
         <h1 className="truncate">{title}</h1>
       </div>
-      <RoleSwitcher />
+      <div className="flex items-center gap-2">
+        <RoleSwitcher />
+        <ThemeToggle />
+      </div>
     </header>
   )
 }
