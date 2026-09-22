@@ -21,7 +21,7 @@ export function Sidebar({ role }) {
   const items = NAV_ITEMS.filter((item) => item.roles.includes(role))
 
   return (
-    <TooltipProvider delayDuration={150}>
+    <TooltipProvider delayDuration={300}>
       <aside
         className={cn(
           'relative hidden shrink-0 flex-col border-r border-border bg-card transition-[width] duration-300 ease-in-out md:flex',
@@ -68,7 +68,7 @@ export function Sidebar({ role }) {
                   aria-label={collapsed ? flow.title : undefined}
                   className={({ isActive }) =>
                     cn(
-                      'flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-all duration-200',
+                      'flex flex-nowrap items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
                       collapsed && 'justify-center px-0',
                       isActive
                         ? cn(flow.tone, 'shadow-sm')
@@ -76,7 +76,7 @@ export function Sidebar({ role }) {
                     )
                   }
                 >
-                  <flow.icon className="size-4.5 shrink-0" />
+                  <flow.icon className="size-4 shrink-0" />
                   {!collapsed && <span className="truncate">{flow.title}</span>}
                 </NavLink>
               </TooltipTrigger>

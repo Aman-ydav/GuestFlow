@@ -6,7 +6,9 @@ import { cn } from '@/lib/utils'
 // generic demo. Teal/coral/lime plus a couple of lighter variants for contrast
 // in the WebGL lighting.
 const TUBE_COLORS = ['#1EA6A0', '#F43F5E', '#A3E635', '#14213A', '#5EEAD4', '#FDA4AF']
-const LIGHT_COLORS = ['#1EA6A0', '#F43F5E', '#A3E635', '#5EEAD4', '#FDA4AF', '#FFFFFF']
+// No pure white here — it read as a harsh blown-out glow behind the headline
+// text (Aman: "make that less glow, it was much glowing"). Dimmer brand tints only.
+const LIGHT_COLORS = ['#1EA6A0', '#F43F5E', '#A3E635', '#5EEAD4', '#FDA4AF']
 
 function sample(palette, count) {
   const pool = [...palette]
@@ -51,7 +53,9 @@ export function HeroTubesCanvas({ className }) {
         appRef.current = TubesCursor(canvasRef.current, {
           tubes: {
             colors: sample(TUBE_COLORS, 3),
-            lights: { intensity: 200, colors: sample(LIGHT_COLORS, 4) },
+            // Toned way down from the reference's intensity: 200 — that read as
+            // a much stronger glow than a subtle text-readable background needs.
+            lights: { intensity: 50, colors: sample(LIGHT_COLORS, 4) },
           },
         })
       } catch (error) {

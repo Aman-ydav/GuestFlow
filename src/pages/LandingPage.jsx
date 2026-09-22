@@ -20,11 +20,21 @@ export default function LandingPage() {
           is unreachable. */}
       <section className="relative overflow-hidden bg-[#0B0D10] text-white">
         <HeroTubesCanvas className="absolute inset-0 h-full w-full" />
+        {/* Flat scrim, not a gradient — dims the WebGL glow so the headline stays
+            readable without fighting the "no gradients" rule. */}
+        <div className="absolute inset-0 bg-black/35" />
         <div className="site-container relative z-10 grid items-center gap-10 py-16 md:grid-cols-2 md:gap-16 md:py-24">
           <div className="min-w-0 max-w-xl">
-            <h1 className="font-display text-5xl font-extrabold tracking-tight sm:text-6xl">
-              <span className="block">Go beyond the</span>
-              <span className="block text-brand-teal">front desk.</span>
+            <h1 className="font-display text-6xl leading-[0.95] font-extrabold tracking-tight sm:text-7xl lg:text-8xl">
+              {/* <br/> forces the line break; the explicit {' '} keeps a real space
+                  character in the text content either side of it — plain sibling
+                  text nodes around a <br/> get no implicit space in accessible-name
+                  computation, which ran "Go" and "beyond" together with no gap. */}
+              Go{' '}
+              <br />
+              beyond the{' '}
+              <br />
+              <span className="text-brand-teal">front desk.</span>
             </h1>
             <p className="mt-4 max-w-md text-sm text-white/70">
               GuestFlow is a visitor management system — registration, host approvals, pre-approved invites, and a

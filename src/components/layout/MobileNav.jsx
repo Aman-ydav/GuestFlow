@@ -30,8 +30,8 @@ export function MobileNav({ role }) {
         <SheetContent side="left" className="w-72">
           <SheetHeader>
             <SheetTitle asChild>
-              <Link to={ROUTES.HOME} onClick={() => setOpen(false)} className="text-lg font-bold tracking-tight text-foreground">
-                Guest<span className="text-primary">Flow</span>
+              <Link to={ROUTES.HOME} onClick={() => setOpen(false)}>
+                <img src="/full-logo.png" alt="GuestFlow" className="h-7 w-auto" />
               </Link>
             </SheetTitle>
           </SheetHeader>

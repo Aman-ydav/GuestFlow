@@ -37,8 +37,13 @@ export const FLOWS = {
     title: 'Front Desk Dashboard',
     desc: 'Live search, guest details, check-in/out, overstays.',
     icon: FiMonitor,
-    tone: 'bg-brand-ink text-brand-ink-foreground',
-    soft: 'bg-brand-ink/10 text-brand-ink',
+    // Ink is near-black — great contrast on the light dashboard theme, but it
+    // would nearly disappear against the dark theme's own near-black
+    // background. Inverted specifically for this one flow in dark mode
+    // (Aman: "in black theme use the white bg, vice versa in light theme") —
+    // the other flows (coral/lime/teal) stay bright enough in dark mode as-is.
+    tone: 'bg-brand-ink text-brand-ink-foreground dark:bg-white dark:text-brand-ink',
+    soft: 'bg-brand-ink/10 text-brand-ink dark:bg-white/10 dark:text-white',
   },
   admin: {
     to: ROUTES.ADMIN,
