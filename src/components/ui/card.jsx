@@ -35,8 +35,12 @@ function CardTitle({
   className,
   ...props
 }) {
+  // Deliberate exception to "don't edit shadcn internals" (see docs/06-component-library-shadcn.md):
+  // the registry emits a plain <div>, which is invisible to screen-reader heading
+  // navigation. Every real usage in this app is a card's title, so <h3> is correct
+  // app-wide rather than patching each call site.
   return (
-    <div
+    <h3
       data-slot="card-title"
       className={cn("leading-none font-semibold", className)}
       {...props} />

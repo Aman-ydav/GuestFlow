@@ -12,7 +12,7 @@ export default function NotFoundPage() {
         <p className="mt-1 text-sm text-muted-foreground">The page you're looking for doesn't exist.</p>
       </div>
       <Button asChild className="btn-cta">
-        <Link to={ROUTES.FRONT_DESK}>Back to Front Desk</Link>
+        <Link to={ROUTES.HOME}>Back to GuestFlow</Link>
       </Button>
     </div>
   )

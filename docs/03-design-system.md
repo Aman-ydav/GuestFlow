@@ -2,6 +2,12 @@
 
 **Mood reference:** the Traction Guest screenshots you shared — solid flat colour blocks (no gradients), bold geometric/isometric illustration accents, pill-shaped CTAs, generous whitespace, dense small-type data tables. GuestFlow takes the *mood*, not the brand — our own palette below, our own name, no copied logos/marks.
 
+## Site structure: marketing (`/`) vs product (`/app/*`)
+
+`/` is the public landing page (navbar, hero, feature/flow cards, CTA banner) styled closely on the reference mood — see `MarketingNavbar`/`MarketingLayout`/`LandingPage`. The actual product (kiosk, host inbox, invites, front desk, admin) lives under `/app/*` using the dashboard shell (`AppShell`/`Sidebar`/`Topbar`). Every CTA on the landing page links to a real, working `/app/...` route — no fake "book a demo" forms or fabricated testimonials/client logos; where the reference has a testimonial, GuestFlow has an honest "About this project" note instead.
+
+**Exception — the marketing hero is always dark**, regardless of the site-wide light/dark toggle (`bg-[#0B0D10]` literal, not a token). This mirrors the reference's own fixed dark hero treatment and is a deliberate brand choice, not a violation of "every screen works in both themes" — that rule is about the *product* UI (dashboard, forms, tables), which does fully theme. Everything on the landing page below the hero uses normal theme tokens.
+
 ## Color palette — solid colors only, no gradients anywhere
 
 Defined as CSS custom properties in `src/index.css`, in shadcn's HSL-triplet format so they plug straight into shadcn's token names. Every value below has a light and a dark variant.
@@ -10,7 +16,7 @@ Defined as CSS custom properties in `src/index.css`, in shadcn's HSL-triplet for
 
 | Token | Light | Dark | Hex (light) | Used for |
 |---|---|---|---|---|
-| `--brand-teal` | `173 80% 40%` | `173 70% 50%` | `#14B8A6` | Primary actions, links, active nav |
+| `--brand-teal` | `180 72% 38%` | `178 65% 46%` | `~#1EA6A0` | Primary actions, links, active nav. Tuned to H180 (true turquoise) — H173 read too green next to the reference mood, see DECISIONS.md |
 | `--brand-coral` | `350 89% 60%` | `350 85% 65%` | `#F43F5E` | Secondary accent, illustration highlights, destructive-adjacent emphasis |
 | `--brand-lime` | `82 78% 55%` | `82 70% 60%` | `#A3E635` | High-emphasis CTA fills (sparingly — one per screen, like "Confirm Invite") |
 | `--brand-ink` | `221 39% 11%` | — | `#111827` | Headlines, dark-mode-only near-black surfaces |

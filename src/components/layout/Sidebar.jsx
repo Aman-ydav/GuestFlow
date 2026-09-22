@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { FiGrid, FiInbox, FiMail, FiMonitor, FiSettings } from 'react-icons/fi'
 import { cn } from '@/lib/utils'
 import { ROUTES } from '@/constants/routes'
@@ -17,12 +17,12 @@ export function Sidebar({ role }) {
 
   return (
     <aside className="hidden w-56 shrink-0 border-r border-border bg-card md:flex md:flex-col">
-      <div className="flex h-14 items-center gap-2 border-b border-border px-4">
+      <Link to={ROUTES.HOME} className="flex h-14 items-center gap-2 border-b border-border px-4">
         <span className="flex size-7 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">
           G
         </span>
         <span className="text-base font-semibold">GuestFlow</span>
-      </div>
+      </Link>
       <nav className="flex flex-1 flex-col gap-1 p-2">
         {items.map(({ to, label, icon: Icon }) => (
           <NavLink

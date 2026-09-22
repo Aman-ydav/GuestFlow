@@ -19,7 +19,7 @@
   --card-foreground: 221 39% 11%;
   --popover: 0 0% 100%;
   --popover-foreground: 221 39% 11%;
-  --primary: 173 80% 40%;
+  --primary: 180 72% 38%;
   --primary-foreground: 0 0% 100%;
   --secondary: 240 5% 96%;
   --secondary-foreground: 221 39% 11%;
@@ -31,10 +31,12 @@
   --destructive-foreground: 0 0% 100%;
   --border: 240 6% 90%;
   --input: 240 6% 90%;
-  --ring: 173 80% 40%;
+  --ring: 180 72% 38%;
 
-  /* GuestFlow brand tokens — used deliberately, not everywhere (see design-system.md) */
-  --brand-teal: 173 80% 40%;
+  /* GuestFlow brand tokens — used deliberately, not everywhere (see design-system.md).
+     Tuned to a clear turquoise (H180), not a green-leaning teal (H173 reads too green
+     next to the reference mood — see DECISIONS.md). */
+  --brand-teal: 180 72% 38%;
   --brand-coral: 350 89% 60%;
   --brand-coral-foreground: 0 0% 100%;
   --brand-lime: 82 70% 50%;
@@ -48,6 +50,18 @@
   --warning-foreground: 0 0% 100%;
   --info: 217 91% 55%;
   --info-foreground: 0 0% 100%;
+
+  /* Illustration-only fills (HeroIllustration) — plain hex, not HSL triplets,
+     since they're consumed directly as SVG fill="var(...)", not via @theme. */
+  --gf-teal: #1EA6A0;
+  --gf-teal-mid: #178582;
+  --gf-teal-dark: #0F6664;
+  --gf-coral: #F4527A;
+  --gf-ink: #14213A;
+  --gf-card: #FFFFFF;
+  --gf-card-mid: #E8EAF0;
+  --gf-card-dark: #D2D5E0;
+  --gf-line: #14213A;
 }
 
 .dark {
@@ -57,7 +71,7 @@
   --card-foreground: 210 20% 96%;
   --popover: 222 18% 10%;
   --popover-foreground: 210 20% 96%;
-  --primary: 173 65% 48%;
+  --primary: 178 65% 46%;
   --primary-foreground: 224 20% 7%;
   --secondary: 222 14% 16%;
   --secondary-foreground: 210 20% 96%;
@@ -69,9 +83,9 @@
   --destructive-foreground: 0 0% 100%;
   --border: 222 12% 20%;
   --input: 222 12% 20%;
-  --ring: 173 65% 48%;
+  --ring: 178 65% 46%;
 
-  --brand-teal: 173 65% 48%;
+  --brand-teal: 178 65% 46%;
   --brand-coral: 350 80% 65%;
   --brand-coral-foreground: 224 20% 7%;
   --brand-lime: 82 60% 55%;

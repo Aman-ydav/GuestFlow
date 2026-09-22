@@ -69,4 +69,4 @@ A flow is done when: all fields/actions in `docs/requirements.md` for that flow 
 
 ## Status
 
-Not yet scaffolded. the GuestFlow repo root is empty. Waiting for Aman's go.
+Scaffolded and building. `/` is the marketing landing page (`components/marketing/`), `/app/*` is the product (`AppShell`). Flow 1 (Visitor Registration) is complete end-to-end and tested (15 Vitest tests, jsdom-based — see `docs/design-decisions.md` § Testing for why not a real browser in this sandbox). Flows 2–4 are routed as honest "coming next" placeholders, not built yet. Build and lint both clean. Full status: root `../PLAN.md`.

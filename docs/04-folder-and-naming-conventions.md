@@ -12,9 +12,13 @@ GuestFlow/
 │   └── favicon.svg
 ├── src/
 │   ├── core/
-│   │   ├── App.jsx              root component: providers + router outlet
-│   │   ├── router.jsx           route tree (layout routes, role gates)
-│   │   └── providers.jsx        Redux Provider, ThemeProvider, Toaster
+│   │   ├── App.jsx              root component: Providers + RouterProvider
+│   │   ├── routes.jsx           route DEFINITIONS only (no router instance — tests build their own createMemoryRouter from this)
+│   │   ├── router.jsx           createBrowserRouter(routes) — the real app's router singleton
+│   │   ├── providers.jsx        Redux Provider
+│   │   └── uiSlice.js           theme/role/filters — core app state, not a "feature"
+│   ├── components/
+│   │   └── marketing/           MarketingNavbar, Footer, MarketingLayout, HeroIllustration — the public landing page's own components, not part of components/ui
 │   ├── store/
 │   │   ├── index.js             configureStore, combines feature slices
 │   │   └── rootReducer.js
