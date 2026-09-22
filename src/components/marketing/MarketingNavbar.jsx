@@ -79,7 +79,7 @@ export function MarketingNavbar() {
             <FiSearch className="size-4" />
           </Button>
           <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
-            <Link to={ROUTES.FRONT_DESK}>Login</Link>
+            <Link to={ROUTES.LOGIN}>Login</Link>
           </Button>
           <Button asChild size="sm" className="btn-cta hidden bg-brand-lime text-brand-lime-foreground hover:bg-brand-lime/90 sm:inline-flex">
             <Link to={ROUTES.FRONT_DESK}>View Live Demo</Link>
@@ -122,7 +122,7 @@ export function MarketingNavbar() {
           </nav>
           <div className="mt-auto flex flex-col gap-2 border-t border-border p-4">
             <Button variant="outline" asChild>
-              <Link to={ROUTES.FRONT_DESK} onClick={() => setMobileOpen(false)}>Login</Link>
+              <Link to={ROUTES.LOGIN} onClick={() => setMobileOpen(false)}>Login</Link>
             </Button>
             <Button asChild className="btn-cta bg-brand-lime text-brand-lime-foreground hover:bg-brand-lime/90">
               <Link to={ROUTES.FRONT_DESK} onClick={() => setMobileOpen(false)}>View Live Demo</Link>

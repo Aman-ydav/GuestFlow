@@ -37,20 +37,26 @@ GuestFlow/
 │   │   ├── layout/               AppShell, Sidebar, Topbar, RoleSwitcher
 │   │   ├── StatusBadge.jsx
 │   │   ├── FlowBanner.jsx        colored page header, one per flow (see 03-design-system.md)
+│   │   ├── BannerDecoration.jsx  seeded decorative SVG scatter used inside FlowBanner
 │   │   ├── AvatarInitials.jsx
 │   │   ├── DataTable/            shared table (see 06-component-library-shadcn.md)
 │   │   └── MultiSelectCombobox/  shared custom combobox
 │   ├── pages/
+│   │   ├── LandingPage.jsx        marketing home (/)
+│   │   ├── LoginPage.jsx          split-screen sign-in — sets role/host, does NOT gate /app/* (see 03-design-system.md)
+│   │   ├── SignupPage.jsx         split-screen mock signup
 │   │   ├── KioskPage.jsx
 │   │   ├── HostInboxPage.jsx
 │   │   ├── InvitesPage.jsx
 │   │   ├── FrontDeskPage.jsx
-│   │   └── AdminPage.jsx
-│   ├── hooks/                    cross-feature hooks: useDebounce.js, useTheme.js
+│   │   ├── AdminPage.jsx
+│   │   ├── ComingSoonPage.jsx     honest "not built yet" placeholder pattern
+│   │   ├── NotFoundPage.jsx / RouteErrorPage.jsx
+│   ├── hooks/                    cross-feature hooks: useDebounce.js, useTheme.js (dashboard-only theme, see 03-design-system.md)
 │   ├── lib/                      utils.js (cn helper), dateUtils.js, statusTokens.js, statusTransitions.js, validators.js, avatarPalette.js, flowTheme.js (ONE color per flow — see 03-design-system.md)
 │   ├── services/                 apiClient.js, visitorService.js, inviteService.js, hostService.js
 │   ├── mocks/                    see 01-architecture-and-data.md
-│   ├── constants/                routes.js, visitTypes.js, roles.js
+│   ├── constants/                routes.js (incl. LOGIN/SIGNUP), visitTypes.js, roles.js
 │   ├── assets/                   local images that aren't public/ (rare — prefer public/)
 │   ├── index.css                 ALL global styles, theme tokens, Tailwind layers — single source
 │   └── main.jsx

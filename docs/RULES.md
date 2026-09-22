@@ -10,10 +10,12 @@ The single enforcement checklist. Every other doc explains *why*; this page is t
 
 ## Every screen, before it's marked done
 
-- [ ] Light theme only — there is no dark mode and no toggle (Aman's explicit call, see `DECISIONS.md`). Don't add theme-conditional styling.
+- [ ] Dashboard (`/app/*`) screens: check **both** light and dark — the toggle is real there (`ThemeToggle`, scoped to `AppShell`'s own root, see `03-design-system.md`). Marketing/auth screens (`/`, `/login`, `/signup`): **light only, no toggle**, ever — don't add one.
 - [ ] Uses `.site-container` for section width, not a one-off `max-w-*`.
 - [ ] If it's a dashboard page for one of the 4 flows, it starts with `<FlowBanner flowKey="..." />` using that flow's color from `lib/flowTheme.js` — not a locally invented color.
 - [ ] No "G" icon badge next to the GuestFlow wordmark — text only (`Guest` + `Flow` in primary).
+- [ ] Textareas rely on the shared `Textarea` component's built-in `max-h-48 overflow-y-auto` — don't remove it per-usage; long lists (invites, pending requests, activity feeds) get a scrollable region with a fixed/matching height, not unbounded page growth.
+- [ ] Cards that sit side-by-side in the same row get equal height (`items-stretch` — the CSS Grid default — plus `h-full`/`flex flex-col` on the Card itself, with the scrollable content inside, not the card growing past its row).
 - [ ] Every action (submit, approve, reject, check-in, check-out, cancel) gives visible feedback — toast, inline error, or status change. No silent no-ops.
 - [ ] Every form validates before submit; errors are human-readable, not raw error codes.
 - [ ] Destructive actions confirm first (`AlertDialog`).
@@ -47,4 +49,4 @@ The single enforcement checklist. Every other doc explains *why*; this page is t
 
 ## Decisions already made — don't re-ask, don't re-litigate
 
-Mock-only backend · Redux Toolkit · Axios · `react-icons` app-wide (incl. inside shadcn internals) · illustrations from unDraw/Storyset, recoloured · no gradients, ever · dense type scale. Full detail: `00-prd.md` § Decisions. Anything genuinely new that comes up goes through a chat confirmation first, then gets added here.
+Mock-only backend · Redux Toolkit · Axios · `react-icons` app-wide (incl. inside shadcn internals) · illustrations from unDraw/Storyset, recoloured · no gradients, ever · dense type scale · dashboard-only dark/light toggle (marketing stays light) · `/login`+`/signup` exist but don't gate `/app/*`. Full detail: `00-prd.md` § Decisions. Anything genuinely new that comes up goes through a chat confirmation first, then gets added here.

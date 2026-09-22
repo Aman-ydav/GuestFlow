@@ -175,3 +175,28 @@ describe('App shell', () => {
     expect(screen.getByRole('button', { name: /save settings/i })).toBeInTheDocument()
   })
 })
+
+describe('Login / Signup', () => {
+  it('renders the login form and signs in with a picked role', async () => {
+    renderAt('/login')
+    const user = userEvent.setup()
+    expect(await screen.findByRole('heading', { name: /sign in/i })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /sign in/i }))
+    // default role is Front Desk — should land on the Front Desk dashboard
+    expect(await screen.findByRole('heading', { level: 1, name: /front desk/i })).toBeInTheDocument()
+  })
+
+  it('renders the signup form and validates required fields', async () => {
+    renderAt('/signup')
+    const user = userEvent.setup()
+    expect(await screen.findByRole('heading', { name: /create an account/i })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /create account/i }))
+    expect(await screen.findByText(/name is required/i)).toBeInTheDocument()
+  })
+
+  it('the marketing navbar Login link points at /login, not straight into the app', async () => {
+    renderAt('/')
+    const loginLinks = screen.getAllByRole('link', { name: /^login$/i })
+    expect(loginLinks[0]).toHaveAttribute('href', '/login')
+  })
+})
