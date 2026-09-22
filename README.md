@@ -54,24 +54,27 @@ Every status change goes through one transition table (`lib/statusTransitions.js
 
 ```mermaid
 stateDiagram-v2
+    state "checked-in" as checked_in
+    state "checked-out" as checked_out
     [*] --> pending: Kiosk registration
     pending --> approved: Host approves
     pending --> rejected: Host rejects
-    approved --> "checked-in": Front desk — manual or QR scan
-    "checked-in" --> "checked-out": Front desk — manual or QR scan
+    approved --> checked_in: Front desk — manual or QR scan
+    checked_in --> checked_out: Front desk — manual or QR scan
     rejected --> [*]
-    "checked-out" --> [*]
+    checked_out --> [*]
 ```
 
 ### Invite lifecycle
 
 ```mermaid
 stateDiagram-v2
+    state "checked-in" as checked_in
     [*] --> invited: Host schedules a visit
-    invited --> "checked-in": Guest arrives within the window
+    invited --> checked_in: Guest arrives within the window
     invited --> expired: Window passes, unused
     invited --> cancelled: Host cancels
-    "checked-in" --> [*]
+    checked_in --> [*]
     expired --> [*]
     cancelled --> [*]
 ```
