@@ -4,6 +4,14 @@ A workplace Visitor Management System: a visitor registers at a kiosk, their hos
 
 Built as a case-study submission for the MoveInSync Frontend Intern role. All four flows described in the case study are complete and working end to end, backed entirely by mock data (no live backend — see [Architecture](#architecture) for why, and how that boundary is drawn).
 
+## Live demo
+
+[https://guestflow-moveinsync.vercel.app](https://guestflow-moveinsync.vercel.app)
+
+[![GuestFlow landing page](demo/landing-page.png)](https://guestflow-moveinsync.vercel.app/)
+
+> **Video walkthrough:** [Watch the GuestFlow product walkthrough on Google Drive](https://drive.google.com/file/d/1dsgnGJrCfU27Z0XhykWb5pBwsM5Mc9SU/view?usp=sharing)
+
 ## The problem
 
 A front desk needs to know, at any moment, exactly who is in the building, who they're visiting, and whether they were actually authorized to be there — without turning every visit into a five-minute manual process at the gate. That means three things have to work together: a fast way to register a walk-in, a way for the person being visited to approve them without a phone call, and a way to skip all of that entirely for guests who were expected.
@@ -35,6 +43,16 @@ The live operational view: every visitor, searchable and filterable, paginated. 
 
 ### Admin — `/app/admin`
 Configures the rules the other three flows enforce (pre-approval limit, overstay threshold, office list) and manages the host/employee directory — add or remove who counts as a host.
+
+## Product walkthrough
+
+| Visitor kiosk | Host approval |
+|---|---|
+| ![Visitor kiosk registration form](demo/visitor-kisok.png) | ![Host approval inbox](demo/host-approval.png) |
+| Front desk dashboard | Pre-approved invite |
+| ![Front desk visitor dashboard](demo/front-desk.png) | ![Pre-approved invite and QR e-pass](demo/pre-approval.png) |
+| Admin controls |  |
+| ![Admin configuration screen](demo/admin.png) |  |
 
 ## Architecture
 
